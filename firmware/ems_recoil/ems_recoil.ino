@@ -19,8 +19,8 @@
  *  D13  LED      ARMED 표시
  *  A4/A5 I2C     MPU-6050
  *
- * 하드웨어 안전: 555는 "펄스 끊김 감지" 모드 (100k x 1uF = 0.11s).
- *   아두이노가 유지 신호를 토글하는 동안만 555 출력 HIGH. 루프가 멈추거나 핀이 고착되면 0.11초 안에 차단.
+ * 하드웨어 안전: 555는 "펄스 끊김 감지" 모드 (470k x 100nF = 약 0.05s).
+ *   아두이노가 유지 신호를 토글하는 동안만 555 출력 HIGH. 루프가 멈추거나 핀이 고착되면 0.05초 안에 차단.
  *
  * 프로토콜  $BODY*HH\n  (HH = BODY XOR)
  *  PC -> MCU : $H  하트비트 / $A,1  $A,0  아밍 / $X  전부 정지 / $R  FAULT 해제
@@ -313,7 +313,7 @@ void loop() {
     } else if (c.mode == M_REST && (int32_t)(now - c.restUntil) >= 0) {
       c.mode = M_OFF;
     }
-    // 유지 신호: 자극 중에만 토글 (루프가 멈추면 555가 0.11초 안에 차단)
+    // 유지 신호: 자극 중에만 토글 (루프가 멈추면 555가 0.05초 안에 차단)
     if ((c.mode == M_PULSE || c.mode == M_HOLD) && now - c.lastKa >= KA_HALF_MS) {
       c.kaLevel = !c.kaLevel; digitalWrite(c.ka, c.kaLevel); c.lastKa = now;
     }
