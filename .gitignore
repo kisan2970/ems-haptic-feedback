@@ -6,4 +6,4 @@ build/
 Thumbs.db
 .DS_Store
 tools/board_check_result.txt
-processing/EMSRecoilSim/ball_results.csv
+processing/EMSRecoilSim/ball_results*.csv

@@ -37,7 +37,7 @@
 ├── docs/pad_placement.png                       전극 패드 붙이는 위치
 ├── docs/probe_a20_a21.png                       멀티미터로 PhotoMOS 확인하는 법
 ├── firmware/ems_recoil/ems_recoil.ino          Arduino Uno 펌웨어 v2 (반동 + 무게)
-├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 (v1 구조, VR 단계용)
+├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 v2.1 (우노와 같은 로직, KA는 GPIO32/33, VR 단계용)
 ├── processing/EMSRecoilSim/EMSRecoilSim.pde    시연 화면 (총 / 들기 / 벽 모드)
 └── tools/                                      시리얼 자동 검사, 배선도 생성 스크립트
 ```
@@ -123,7 +123,7 @@
 
 **출력 측 배선**: 여분 리드선의 A 가닥을 중간에서 자르고 SSR 출력 핀(3번·4번) 사이에 삽입한다. AQY210EH는 DIP-4이며 1번 LED+, 2번 LED−, 3·4번 출력이다. B 가닥은 그대로 전극 B로 간다. 리드선은 꼬아서 USB/IMU 케이블과 떨어뜨린다. **EMS 측 어느 선도 아두이노 GND에 닿으면 안 된다.**
 
-**더미 로드 (패드 이탈 감지 기기용)**: 두 번째 AQY210EH를 리드 A(기기 쪽)와 리드 B 사이에 1kΩ 2W와 직렬로 놓고, LED는 D9 → 330Ω으로 구동. ARMED 상태에서 자극 중이 아닐 때 D9 HIGH(더미 로드 연결), 자극 시 D9 LOW 후 1ms 뒤 D5 HIGH(break-before-make). 리셋 시 D9 LOW → 기기가 오픈로드를 감지해 강도 0으로 떨어지므로 실패 방향도 안전하다.
+**더미 로드 (패드 이탈 감지 기기용, v1 설계)**: v2에서 D9·D10은 유지 신호(KA) 핀이므로, 더미 로드가 필요해지면 D11·D12 같은 빈 핀을 쓴다. 지금 쓰는 TENS 7000은 패드 이탈 감지가 없어 필요 없다. 두 번째 AQY210EH를 리드 A(기기 쪽)와 리드 B 사이에 1kΩ 2W와 직렬로 놓고, LED는 D9 → 330Ω으로 구동. ARMED 상태에서 자극 중이 아닐 때 D9 HIGH(더미 로드 연결), 자극 시 D9 LOW 후 1ms 뒤 D5 HIGH(break-before-make). 리셋 시 D9 LOW → 기기가 오픈로드를 감지해 강도 0으로 떨어지므로 실패 방향도 안전하다.
 
 **폴백 A안 (PC817 버튼 인터셉트)**: PC817 V_CEO 35V, 단방향이라 ±100V 양극성 TENS 출력을 게이팅할 수 없다. 버튼 패드(약 3V, <1mA)에만 쓴다.
 ```
@@ -146,7 +146,7 @@ I_F ≈ 11.5mA, CTR ≥ 50% → I_C ≥ 5mA로 버튼 신호 전류를 충분히
 | L0 기기 고유 | 인증 기기 출력단 무개조, 강도 다이얼 **물리 스토퍼(Safety Clamp)** 로 캘리브레이션 상한 고정, 배터리 구동 | 우리 회로 전체 |
 | L1 하드웨어 차단 | 전극 경로에 실험자 E-STOP NC + 참가자 STOP NC 직렬. PhotoMOS는 무전원 시 OPEN(fail-open). D5 10k 풀다운 | MCU, PC, 펌웨어 |
 | L2 하드웨어 시간 제한 | 555 모노스테이블 0.3s 창 AND 게이트 | 펌웨어 고착 |
-| L3 펌웨어 | MAX_PULSE 250ms, MIN_GAP 300ms, 10초 창 듀티 30%, 분당 30회, PC 하트비트 1s 타임아웃, WDT 250ms, ARM 키스위치, ESTOP 인터럽트 즉시 차단, FAULT 래치(`$R`로만 해제) | PC 소프트웨어 |
+| L3 펌웨어 | MAX_PULSE 250ms, MIN_GAP 300ms, 10초 창 듀티 30%, 분당 40회, 무게 5초·휴식 2초·1분 누적 30초·재들기 간격 0.5초, PC 하트비트 1s 타임아웃, WDT 250ms, ARM 키스위치, ESTOP 인터럽트 즉시 차단, FAULT 래치(`$R`로만 해제) | PC 소프트웨어 |
 | L4 절차 | 스크리닝(심박조율기/ICD, 뇌전증, 임신, 심장질환, 피부손상), 구두 동의, 전극은 **전완 배측에만**(흉부·경부·두부·양팔 교차 금지), 발표자 본인 선시연, 참가자당 최대 40회 | 사람의 판단 |
 
 ### 1.7 전극 위치 (손목 신전)
@@ -177,8 +177,9 @@ I_F ≈ 11.5mA, CTR ≥ 50% → I_C ≥ 5mA로 버튼 신호 전류를 충분히
 
 - seq: 0~65535 순환. PC에서 건너뜀 감지로 패킷 유실률 측정.
 - roll/pitch: 도, 소수 1자리 (상보필터). gx~gz: deg/s 정수. ax~az: g × 100 정수. dist_mm: ToF(VL53L1X) 장착 시 거리, 미장착 -1.
-- state: 0 IDLE, 1 ARMED, 2 STIM, 3 COOLDOWN, 9 FAULT.
-- 오류 코드: 1 ESTOP, 2 ARM_SWITCH_OFF, 3 HEARTBEAT_LOST, 4 NOT_ARMED, 5 BUDGET, 6 BAD_CS, 7 IN_FAULT, 8 ESTOP_STILL_PRESSED, 9 UNKNOWN, 10 BAD_CH.
+- state: 0 IDLE, 1 ARMED, 2 자극 중, 9 FAULT. (v1의 3 COOLDOWN은 v2에서 없어졌다. 간격 제한은 채널별로 펌웨어 안에서만 처리)
+- 오류 코드: 1 ESTOP, 2 ARM_SWITCH_OFF, 3 HEARTBEAT_LOST, 4 NOT_ARMED, 5 BUDGET, 6 BAD_CS, 7 IN_FAULT, 8 ESTOP_STILL_PRESSED, 9 UNKNOWN, 10 BAD_CH, 11 HOLD_REST / HOLD_LIMIT (무게 5초 도달 또는 휴식 중), 12 BUSY (그 채널이 이미 자극 중), 13 HOLD_BUDGET (무게 1분 누적 30초 초과), 14 TOO_SOON (반동 간격 300ms 미만).
+- `$W` 추가 규칙 (v2.1): 내려놓은 뒤 0.5초 안의 재요청은 조용히 무시되고, 다음 재전송에서 켜진다.
 
 예: `$S,1042,3.2,-27.5,12,-410,5,15,-8,97,-1,1*4C`
 
@@ -237,7 +238,7 @@ env  = 0 (강체: 평탄)  |  1 (연체: 100% → D 로 선형 감쇠)
 
 - 왜 지속시간이 주 변수인가: 상용 기기는 진폭을 우리가 바꿀 수 없다. 짧은 펄스열(60ms)은 "톡" 치는 반동, 200ms는 "밀려나는" 반동으로 지각된다.
 - 듀티 변조(50Hz on/off 게이팅)는 기기 펄스 일부를 걸러 평균 근력을 낮춘다. 기기 펄스 주파수를 60Hz 이상으로 두면 비트(beat) 현상이 덜하다.
-- 재질 3종은 데모에서 "강철 벽 / 고무 / 스펀지"로 키 1/2/3 전환. 같은 속도에서 자극 봉투(envelope)가 달라지는 것을 참가자가 구별하면 설득력이 크게 오른다.
+- (미구현. 지금 스케치에서 1/2/3 키는 모드 전환이고 벽 모드는 듀티 100% 고정이다. 넣는다면 다른 키를 쓴다.) 재질 3종은 데모에서 "강철 벽 / 고무 / 스펀지"로 전환. 같은 속도에서 자극 봉투(envelope)가 달라지는 것을 참가자가 구별하면 설득력이 크게 오른다.
 
 ### 3.2 Processing 스켈레톤
 

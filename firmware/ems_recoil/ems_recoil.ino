@@ -1,5 +1,5 @@
 /*
- * ems_recoil.ino  v2  -  EMS 근자극 기반 반동 + 무게감 피드백 펌웨어 (Arduino Uno)
+ * ems_recoil.ino  v2.1  -  EMS 근자극 기반 반동 + 무게감 피드백 펌웨어 (Arduino Uno)
  * Serial 115200
  *
  * 두 가지 자극
@@ -28,6 +28,13 @@
  *              $W,<mask>                         무게 유지 (mask 0=해제, 1=CH1, 2=CH2, 3=둘 다). 200ms 안에 재전송해야 유지
  *  MCU -> PC : $S,seq,roll,pitch,gx,gy,gz,ax,ay,az,dist,state   100Hz  (state 0 IDLE,1 ARMED,2 자극중,9 FAULT)
  *              $K,...  ACK  /  $E,<code>,<msg>  오류  /  $I,...  부팅
+ *
+ * v2.1 (10/28) 안전 예산 수정
+ *  - 분당 반동 제한이 기록 버퍼(32)보다 커서(40) 동작하지 않던 문제: 버퍼를 제한 + 8로.
+ *  - 무게 누적이 최근 8회만 세서 짧게 여러 번 들면 1분 30초 한도를 넘던 문제: 10초 칸별 시간 누적으로.
+ *  - $X·하트비트·ARM·비상정지로 끊긴 무게가 누적에 안 들어가던 문제: allOff()가 holdStop()을 거친다.
+ *  - 내려놓은 뒤 0.5초 안에는 다시 들기 불가.
+ *  - I2C 타임아웃 3ms, 읽기 실패 시 그 샘플만 건너뜀.
  */
 #include <Wire.h>
 #include <avr/wdt.h>
@@ -46,7 +53,9 @@ const uint8_t  MAX_TRIG_PER_MIN   = 40;
 const uint16_t HOLD_REFRESH_TO_MS = 200;    // $W 재전송 없으면 해제
 const uint16_t MAX_HOLD_MS        = 5000;   // 한 번 들기 최대
 const uint16_t HOLD_REST_MS       = 2000;   // 최대 도달 후 강제 휴식
-const uint32_t HOLD_WINDOW_MS     = 60000;
+const uint16_t HOLD_MIN_GAP_MS    = 500;    // 내려놓은 뒤 다시 들기까지 최소 간격
+const uint16_t HOLD_SLOT_MS       = 10000;  // 무게 누적은 10초 칸 6개(최근 약 1분)에 시간으로 쌓는다
+const uint8_t  HOLD_SLOTS         = 6;      //  -> 들기 횟수와 상관없이 누적 시간이 정확하다
 const uint32_t MAX_HOLD_IN_WIN    = 30000;  // 1분 중 채널당 누적 30초
 const uint16_t HEARTBEAT_TO_MS    = 1000;
 const uint8_t  MOD_PERIOD_MS      = 50;     // duty<100 일 때 켜고 끄는 주기 (떨림 질감)
@@ -62,7 +71,7 @@ struct Chan {
   uint32_t t0, lastRefresh, lastEnd, restUntil, lastKa, lastErr;
   uint16_t dur; uint8_t duty, env;
   bool kaLevel;
-  uint32_t holdEnd[8]; uint16_t holdLen[8]; uint8_t holdI;   // 무게 누적 기록
+  uint16_t holdSlot[HOLD_SLOTS]; uint32_t holdSlotIdx;       // 무게 누적 (10초 칸별 ms)
 };
 Chan ch[2] = {
   {5, 4, 9},
@@ -73,7 +82,7 @@ volatile uint8_t sys = SYS_IDLE;
 volatile bool estopFlag = false;
 uint32_t lastHeartbeat = 0;
 
-const uint8_t LOG_N = 32;                      // 반동 기록 (두 채널 합산)
+const uint8_t LOG_N = MAX_TRIG_PER_MIN + 8;    // 반동 기록 (두 채널 합산). 분당 제한보다 커야 제한이 동작한다
 uint32_t logT[LOG_N]; uint16_t logD[LOG_N]; uint8_t logI = 0;
 
 float roll = 0, pitch = 0;
@@ -94,8 +103,16 @@ void chanOff(Chan& c) {
   digitalWrite(c.gate, LOW);
   digitalWrite(c.ka, LOW); c.kaLevel = false;
 }
+void holdStop(Chan& c, uint32_t now, bool rest);
+// 어떤 경로로 끊겨도($X, 하트비트, ARM, 비상정지) 무게 사용 시간을 기록해야 예산을 우회할 수 없다
 void allOff() {
-  for (uint8_t i = 0; i < 2; i++) { chanOff(ch[i]); if (ch[i].mode != M_REST) ch[i].mode = M_OFF; }
+  uint32_t now = millis();
+  for (uint8_t i = 0; i < 2; i++) {
+    Chan& c = ch[i];
+    if (c.mode == M_HOLD) { holdStop(c, now, false); continue; }
+    chanOff(c);
+    if (c.mode == M_PULSE) { c.lastEnd = now; c.mode = M_OFF; }
+  }
 }
 void estopISR() { digitalWrite(5, LOW); digitalWrite(6, LOW); estopFlag = true; }
 
@@ -123,15 +140,27 @@ bool pulseBudgetOK(uint32_t now, uint16_t dur) {
   }
   return (on + dur <= MAX_PULSE_ON_WIN) && (cnt < MAX_TRIG_PER_MIN);
 }
+// 지금 칸으로 넘어가면서 지나간 칸을 비운다
+void holdAdvance(Chan& c, uint32_t now) {
+  uint32_t idx = now / HOLD_SLOT_MS;
+  uint32_t d = idx - c.holdSlotIdx;
+  if (!d) return;
+  if (d >= HOLD_SLOTS) memset(c.holdSlot, 0, sizeof c.holdSlot);
+  else for (uint32_t k = 1; k <= d; k++) c.holdSlot[(c.holdSlotIdx + k) % HOLD_SLOTS] = 0;
+  c.holdSlotIdx = idx;
+}
 uint32_t holdUsed(Chan& c, uint32_t now) {
+  holdAdvance(c, now);
   uint32_t s = 0;
-  for (uint8_t i = 0; i < 8; i++) if (c.holdEnd[i] && now - c.holdEnd[i] < HOLD_WINDOW_MS) s += c.holdLen[i];
+  for (uint8_t i = 0; i < HOLD_SLOTS; i++) s += c.holdSlot[i];
   return s;
 }
 void holdStop(Chan& c, uint32_t now, bool rest) {
   chanOff(c);
   uint32_t len = now - c.t0;
-  c.holdEnd[c.holdI] = now ? now : 1; c.holdLen[c.holdI] = len > 65000 ? 65000 : len; c.holdI = (c.holdI + 1) % 8;
+  holdAdvance(c, now);
+  uint16_t& slot = c.holdSlot[c.holdSlotIdx % HOLD_SLOTS];
+  slot = (slot + len > 65000UL) ? 65000 : slot + len;
   c.lastEnd = now;
   if (rest) { c.mode = M_REST; c.restUntil = now + HOLD_REST_MS; }
   else c.mode = M_OFF;
@@ -169,6 +198,7 @@ void cmdHold(int mask) {
         if (now - c.lastErr > 500) { sendf("E,11,HOLD_REST,%d", i + 1); c.lastErr = now; }
         continue;
       }
+      if (now - c.lastEnd < HOLD_MIN_GAP_MS) continue;     // 다음 재전송에서 다시 시도
       if (holdUsed(c, now) >= MAX_HOLD_IN_WIN) {
         if (now - c.lastErr > 500) { sendf("E,13,HOLD_BUDGET,%d", i + 1); c.lastErr = now; }
         continue;
@@ -243,12 +273,14 @@ void mpuInit() {
 }
 void sensorTick() {
   static uint32_t tPrev = micros();
-  int16_t ax, ay, az, gx, gy, gz;
-  Wire.beginTransmission(0x68); Wire.write(0x3B); Wire.endTransmission(false);
-  Wire.requestFrom(0x68, 14, true);
-  ax = Wire.read() << 8 | Wire.read(); ay = Wire.read() << 8 | Wire.read(); az = Wire.read() << 8 | Wire.read();
-  Wire.read(); Wire.read();
-  gx = Wire.read() << 8 | Wire.read(); gy = Wire.read() << 8 | Wire.read(); gz = Wire.read() << 8 | Wire.read();
+  static int16_t ax = 0, ay = 0, az = 4096, gx = 0, gy = 0, gz = 0;   // 읽기 실패 시 직전 값 유지
+  Wire.beginTransmission(0x68); Wire.write(0x3B);
+  // EMS 노이즈로 I2C가 잠기면 Wire 타임아웃(setup 참고)이 풀어 준다. 실패하면 이번 샘플만 건너뛴다
+  if (Wire.endTransmission(false) == 0 && Wire.requestFrom(0x68, 14, true) == 14) {
+    ax = Wire.read() << 8 | Wire.read(); ay = Wire.read() << 8 | Wire.read(); az = Wire.read() << 8 | Wire.read();
+    Wire.read(); Wire.read();
+    gx = Wire.read() << 8 | Wire.read(); gy = Wire.read() << 8 | Wire.read(); gz = Wire.read() << 8 | Wire.read();
+  }
   uint32_t tNow = micros(); float dt = (tNow - tPrev) * 1e-6f; tPrev = tNow;
   float axg = ax / 4096.0f, ayg = ay / 4096.0f, azg = az / 4096.0f;
   float gxd = gx / 32.8f, gyd = gy / 32.8f, gzd = gz / 32.8f;
@@ -275,9 +307,10 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(PIN_ESTOP), estopISR, FALLING);
   Serial.begin(115200);
   Wire.begin(); Wire.setClock(400000);
+  Wire.setWireTimeout(3000, true);   // 3ms. 없으면 I2C가 잠길 때 루프가 멈춰 워치독 리셋이 반복된다 (AVR 코어 1.8.3 이상)
   mpuInit();
   wdt_enable(WDTO_250MS);
-  sendLine("I,EMS_RECOIL,v2,PULSE<=250,HOLD<=5000");
+  sendLine("I,EMS_RECOIL,v2.1,PULSE<=250,HOLD<=5000");
 }
 
 void loop() {

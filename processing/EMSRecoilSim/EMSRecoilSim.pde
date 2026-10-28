@@ -5,6 +5,7 @@
 //   [3] 벽 모드  : IMU로 손을 뻗어 벽에 부딪히면 반동
 //   [4] 공 비교  : 똑같이 생긴 공 2개 중 하나만 무겁다 (블라인드 테스트)
 //                  공 클릭 = 들기/내려놓기, H = 무거운 공 다시 섞기, J/K = 참가자 답(공1/공2가 무겁다), V = 정답 보기
+//                  L = 화면 지연 켜기/끄기. 끄면 두 공이 똑같이 따라와 EMS만으로 맞히는지 본다 (CSV visual_lag 열)
 // 공통: A 아밍, SPACE 전부 정지, R FAULT 해제, T 테스트 반동 100ms
 import processing.serial.*;
 
@@ -31,6 +32,7 @@ final float[] BALL_X = { 330, 670 };
 int mode = 1;                // 1 총, 2 들기, 3 벽, 4 공 비교
 int ballHeld = -1, heavyIdx = 1, holdStart = 0;
 boolean reveal = false;
+boolean ballVisualLag = true;   // 참가자가 화면을 보면 지연만 보고도 무거운 공을 맞힐 수 있다. EMS만의 효과는 L로 끄고 잰다
 int trials = 0, correct = 0;
 float ballLiftY = 0;
 int weight = 1;
@@ -129,7 +131,7 @@ void drawBalls() {
   float tableY = height * 0.78;
   stroke(110); strokeWeight(5); line(150, tableY + 32, 850, tableY + 32); noStroke();
   float target = constrain(map(pitch, PITCH_MIN, PITCH_MAX, 0, 1), 0, 1);
-  float follow = (ballHeld == heavyIdx) ? BALL_FOLLOW_HEAVY : BALL_FOLLOW_LIGHT;
+  float follow = (ballVisualLag && ballHeld == heavyIdx) ? BALL_FOLLOW_HEAVY : BALL_FOLLOW_LIGHT;
   ballLiftY = (ballHeld >= 0) ? lerp(ballLiftY, target, follow) : lerp(ballLiftY, 0, 0.3);
   for (int i = 0; i < 2; i++) {
     float bx = BALL_X[i];
@@ -148,7 +150,7 @@ void drawBalls() {
     fill(220); textSize(14); text("들고 있는 시간 (최대 5초)", 250, 131);
   }
   fill(255); textSize(16);
-  text("공 클릭 = 들기/내려놓기   H = 섞기   J/K = 답(공1/공2가 무겁다)   V = 정답 보기", 40, height - 60);
+  text("공 클릭 = 들기/내려놓기   H = 섞기   J/K = 답(공1/공2가 무겁다)   V = 정답 보기   L = 화면 지연 " + (ballVisualLag ? "켬" : "끔"), 40, height - 60);
   text("시도 " + trials + "회   정답 " + correct + "회" + (trials > 0 ? "  (" + round(100.0 * correct / trials) + "%)" : ""), 40, 110);
 }
 void pickBall(int i) {
@@ -164,10 +166,11 @@ void shuffleBalls() {
 void answer(int guess) {
   trials++; boolean ok = (guess == heavyIdx); if (ok) correct++;
   String row = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + " " + nf(hour(), 2) + ":" + nf(minute(), 2) + ":" + nf(second(), 2)
-             + "," + trials + "," + (heavyIdx + 1) + "," + (guess + 1) + "," + (ok ? 1 : 0) + "," + HEAVY_MASK;
-  String[] old = loadStrings("ball_results.csv");
-  if (old == null) old = new String[] { "time,trial,heavy_ball,guess,correct,heavy_mask" };
-  saveStrings("ball_results.csv", append(old, row));
+             + "," + trials + "," + (heavyIdx + 1) + "," + (guess + 1) + "," + (ok ? 1 : 0) + "," + HEAVY_MASK + "," + (ballVisualLag ? 1 : 0);
+  // visual_lag 열이 생기며 파일 이름을 바꿨다 (예전 ball_results.csv와 열 수가 달라 섞이지 않게)
+  String[] old = loadStrings("ball_results_v2.csv");
+  if (old == null) old = new String[] { "time,trial,heavy_ball,guess,correct,heavy_mask,visual_lag" };
+  saveStrings("ball_results_v2.csv", append(old, row));
   lastMsg = "답 기록: 공" + (guess + 1) + (ok ? " 정답" : " 오답");
   shuffleBalls();
 }
@@ -240,6 +243,7 @@ void keyPressed() {
   else if (key == 'c' || key == 'C') weight = 2;
   else if (key == 'h' || key == 'H') { if (mode == 4) shuffleBalls(); }
   else if (key == 'v' || key == 'V') { if (mode == 4) reveal = !reveal; }
+  else if (key == 'l' || key == 'L') { if (mode == 4) ballVisualLag = !ballVisualLag; }
   else if (key == 'j' || key == 'J') { if (mode == 4) answer(0); }
   else if (key == 'k' || key == 'K') { if (mode == 4) answer(1); }
   else if (key >= '1' && key <= '4') {
