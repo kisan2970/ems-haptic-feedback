@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1080" viewBox="0 0 1500 1080">
+<defs><filter id="sh"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.22"/></filter><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker><marker id="ag" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1d6b35"/></marker></defs>
+<rect width="1500" height="1080" fill="#f2efe8"/>
+<text x="40" y="50" font-size="28" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">전극 패드 붙이는 위치 — CH1 손목 신전근</text>
+<text x="40" y="82" font-size="15" text-anchor="start" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >오른팔을 손등이 위로 오게 책상에 올리고 위에서 내려다본 모습 (왼팔이면 좌우만 뒤집기). 1cm = 22px</text>
+<path d="M40,228 L60,215 L60,465 L40,452 Z" fill="#f3d3bb" stroke="#c99a7a" stroke-width="2"/>
+<path d="M40,228 L50,228 L60,228 L70,228 L80,228 L90,228 L100,228 L110,228 L120,228 L130,228 L140,228 L150,228 L160,228 L170,228.94545454545454 L180,229.89090909090908 L190,230.83636363636364 L200,231.78181818181818 L210,232.72727272727275 L220,233.6727272727273 L230,234.61818181818182 L240,235.56363636363636 L250,236.5090909090909 L260,237.45454545454544 L270,238.4 L280,239.34545454545454 L290,240.2909090909091 L300,241.23636363636365 L310,242.1818181818182 L320,243.12727272727273 L330,244.07272727272726 L340,245.0181818181818 L350,245.96363636363637 L360,246.9090909090909 L370,247.85454545454547 L380,248.8 L390,249.74545454545455 L400,250.6909090909091 L410,251.63636363636363 L420,252.58181818181816 L430,253.52727272727273 L440,254.47272727272727 L450,255.4181818181818 L460,256.3636363636364 L470,257.3090909090909 L480,258.25454545454545 L490,259.2 L500,260.1454545454545 L510,261.0909090909091 L520,262.0363636363636 L530,262.9818181818182 L540,263.92727272727274 L550,264.8727272727273 L560,265.8181818181818 L570,266.76363636363635 L580,267.70909090909095 L590,268.6545454545454 L600,269.6 L610,270.54545454545456 L620,271.4909090909091 L630,272.43636363636364 L640,273.3818181818182 L650,274.3272727272727 L660,275.27272727272725 L670,276.21818181818185 L680,277.1636363636364 L690,278.1090909090909 L700,279.05454545454546 L710,280 L710,400 L700,400.94545454545454 L690,401.8909090909091 L680,402.8363636363636 L670,403.78181818181815 L660,404.72727272727275 L650,405.6727272727273 L640,406.6181818181818 L630,407.56363636363636 L620,408.5090909090909 L610,409.45454545454544 L600,410.4 L590,411.3454545454546 L580,412.29090909090905 L570,413.23636363636365 L560,414.1818181818182 L550,415.1272727272727 L540,416.07272727272726 L530,417.0181818181818 L520,417.9636363636364 L510,418.9090909090909 L500,419.8545454545455 L490,420.8 L480,421.74545454545455 L470,422.6909090909091 L460,423.6363636363636 L450,424.5818181818182 L440,425.5272727272727 L430,426.4727272727273 L420,427.41818181818184 L410,428.3636363636364 L400,429.3090909090909 L390,430.25454545454545 L380,431.2 L370,432.1454545454545 L360,433.0909090909091 L350,434.0363636363636 L340,434.9818181818182 L330,435.92727272727274 L320,436.8727272727273 L310,437.8181818181818 L300,438.76363636363635 L290,439.7090909090909 L280,440.6545454545454 L270,441.6 L260,442.54545454545456 L250,443.4909090909091 L240,444.43636363636364 L230,445.3818181818182 L220,446.3272727272727 L210,447.27272727272725 L200,448.21818181818185 L190,449.16363636363633 L180,450.1090909090909 L170,451.05454545454546 L160,452 L150,452 L140,452 L130,452 L120,452 L110,452 L100,452 L90,452 L80,452 L70,452 L60,452 L50,452 L40,452 Z" fill="#f3d3bb" stroke="#c99a7a" stroke-width="2.5" filter="url(#sh)"/>
+<path d="M710,280 C770,260 860,265 885,285 L960,282 Q972,294 960,306 L895,310 L972,318 Q982,332 970,344 L895,342 L965,354 Q974,368 962,378 L890,374 L948,386 Q956,400 942,406 L860,402 C800,410 750,404 710,398 Z" fill="#f3d3bb" stroke="#c99a7a" stroke-width="2.5"/>
+<path d="M750,282 C790,230 840,212 875,222 Q888,236 870,246 C840,250 810,268 790,280" fill="#f3d3bb" stroke="#c99a7a" stroke-width="2.5"/>
+<text x="860" y="208" font-size="15" text-anchor="middle" fill="#7a4d2c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">엄지</text>
+<text x="840" y="440" font-size="15" text-anchor="middle" fill="#7a4d2c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >손등</text>
+<text x="720" y="236" font-size="15" text-anchor="end" fill="#7a4d2c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">엄지 쪽 (요측)</text>
+<text x="670" y="433.78181818181815" font-size="15" text-anchor="end" fill="#7a4d2c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">새끼손가락 쪽 (척측)</text>
+<text x="60" y="200" font-size="14" text-anchor="start" fill="#7a4d2c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >위팔</text>
+<path d="M150,236 Q342.0,241.0 534,279.0 L534,321.0 Q342.0,337.0 150,320 Z" fill="#e74c3c40" />
+<path d="M170,332 Q396.0,322.0 622,337.0 L622,363.0 Q396.0,386.0 170,384 Z" fill="#3a7bd540" />
+<text x="490" y="402" font-size="13" text-anchor="middle" fill="#2a5a9e" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">손가락 폄근 (여기만 자극되면 손가락이 펴짐)</text>
+<circle cx="160" cy="248" r="15" fill="#e8d8c6" stroke="#8a6a4a" stroke-width="3"/>
+<line x1="160" y1="232" x2="140" y2="170" stroke="#8a6a4a" stroke-width="2"/>
+<text x="138" y="146" font-size="15" text-anchor="middle" fill="#5a3a1a" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">팔꿈치 바깥쪽 튀어나온 뼈</text>
+<text x="138" y="165" font-size="13" text-anchor="middle" fill="#5a3a1a" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >(외측상과) = 기준점</text>
+<rect x="215.0" y="244.0" width="132" height="88" rx="12" fill="#ffffffcc" stroke="#44617e" stroke-width="3" filter="url(#sh)"/>
+<rect x="223.0" y="252.0" width="116" height="72" rx="8" fill="#8fa7bf88"/>
+<text x="281.0" y="290" font-size="22" text-anchor="middle" fill="#1e3a56" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">패드 A</text>
+<text x="281.0" y="312" font-size="12" text-anchor="middle" fill="#1e3a56" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >(근위)</text>
+<rect x="391.0" y="252.0" width="132" height="88" rx="12" fill="#ffffffcc" stroke="#44617e" stroke-width="3" filter="url(#sh)"/>
+<rect x="399.0" y="260.0" width="116" height="72" rx="8" fill="#8fa7bf88"/>
+<text x="457.0" y="298" font-size="22" text-anchor="middle" fill="#1e3a56" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">패드 B</text>
+<text x="457.0" y="320" font-size="12" text-anchor="middle" fill="#1e3a56" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >(원위)</text>
+<text x="533.0" y="274" font-size="15" text-anchor="start" fill="#a93226" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">← 손목 신전근</text>
+<text x="533.0" y="294" font-size="14" text-anchor="start" fill="#a93226" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">    여기를 자극</text>
+<path d="M301.0,244 C301.0,168 371.0,142 451.0,142" fill="none" stroke="#d62728" stroke-width="5"/>
+<path d="M477.0,252 C477.0,196 537.0,190 607.0,190" fill="none" stroke="#222" stroke-width="5"/>
+<text x="459.0" y="147" font-size="13" text-anchor="start" fill="#b02020" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">← 참가자 STOP 12번에서 오는 선 (빨강)</text>
+<text x="615.0" y="195" font-size="13" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">← 리드 B (검정)</text>
+<line x1="160" y1="490" x2="281.0" y2="490" stroke="#1d6b35" stroke-width="2" marker-start="url(#ag)" marker-end="url(#ag)"/>
+<line x1="160" y1="480" x2="160" y2="500" stroke="#1d6b35" stroke-width="2"/><line x1="281.0" y1="480" x2="281.0" y2="500" stroke="#1d6b35" stroke-width="2"/>
+<text x="220.5" y="482" font-size="14" text-anchor="middle" fill="#1d6b35" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">패드 A 중심까지 약 5~6cm</text>
+<line x1="347.0" y1="536" x2="391.0" y2="536" stroke="#1d6b35" stroke-width="2" marker-start="url(#ag)" marker-end="url(#ag)"/>
+<line x1="347.0" y1="526" x2="347.0" y2="546" stroke="#1d6b35" stroke-width="2"/><line x1="391.0" y1="526" x2="391.0" y2="546" stroke="#1d6b35" stroke-width="2"/>
+<text x="369.0" y="528" font-size="14" text-anchor="middle" fill="#1d6b35" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">패드 사이 2cm 이상</text>
+<line x1="281.0" y1="582" x2="457.0" y2="582" stroke="#1d6b35" stroke-width="2" marker-start="url(#ag)" marker-end="url(#ag)"/>
+<line x1="281.0" y1="572" x2="281.0" y2="592" stroke="#1d6b35" stroke-width="2"/><line x1="457.0" y1="572" x2="457.0" y2="592" stroke="#1d6b35" stroke-width="2"/>
+<text x="369.0" y="574" font-size="14" text-anchor="middle" fill="#1d6b35" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">중심 사이 약 8cm</text>
+<line x1="160" y1="320" x2="160" y2="582" stroke="#1d6b35" stroke-width="1" stroke-dasharray="4,4"/>
+<line x1="281.0" y1="320" x2="281.0" y2="582" stroke="#1d6b35" stroke-width="1" stroke-dasharray="4,4"/>
+<line x1="457.0" y1="320" x2="457.0" y2="582" stroke="#1d6b35" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="690" y="530" font-size="13" text-anchor="end" fill="#777" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >손목까지 약 25cm</text>
+<rect x="1000" y="120" width="475" height="430" rx="14" fill="#fff" stroke="#cfc6b4" stroke-width="1.5"/>
+<text x="1020" y="156" font-size="19" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">자세 (옆에서 본 모습)</text>
+<rect x="1030" y="290" width="270" height="16" fill="#b08a5a"/><rect x="1040" y="306" width="14" height="70" fill="#8a6a40"/>
+<path d="M1040,270 L1300,276 L1300,290 L1040,290 Z" fill="#f3d3bb" stroke="#c99a7a" stroke-width="2"/>
+<path d="M1300,276 Q1350,278 1380,298 L1372,310 Q1340,296 1300,290 Z" fill="#f3d3bb" stroke="#c99a7a" stroke-width="2"/>
+<path d="M1300,276 Q1350,258 1382,232 L1392,242 Q1355,272 1300,290" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6,4"/>
+<path d="M1400,295 Q1425,260 1402,230" fill="none" stroke="#c0392b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="1420" y="220" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">자극하면</text>
+<text x="1420" y="204" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">손목이 위로</text>
+<rect x="1120" y="264" width="40" height="8" rx="2" fill="#8fa7bf"/><rect x="1190" y="265" width="40" height="8" rx="2" fill="#8fa7bf"/>
+<text x="1175" y="256" font-size="12" text-anchor="middle" fill="#44617e" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">패드는 팔 윗면</text>
+<text x="1030" y="410" font-size="14" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >• 손바닥이 아래, 손목부터 끝은 책상 밖으로</text>
+<text x="1030" y="434" font-size="14" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >• 손과 팔에 힘을 빼고 그대로 둔다</text>
+<text x="1020" y="476" font-size="17" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">근육 찾는 법</text>
+<text x="1030" y="502" font-size="14" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >주먹을 가볍게 쥐고 손등을 위로 젖히면</text>
+<text x="1030" y="524" font-size="14" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >팔꿈치 아래 엄지 쪽 윗면이 볼록 솟는다 → 그 위</text>
+<rect x="40" y="700" width="900" height="350" rx="14" fill="#fff" stroke="#cfc6b4" stroke-width="1.5"/>
+<text x="60" y="736" font-size="19" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">켜 보고 반응에 따라 옮기기 (노브를 0으로 돌린 뒤 옮긴다)</text>
+<circle cx="70" cy="773" r="5" fill="#1d6b35"/>
+<text x="86" y="778" font-size="15" text-anchor="start" fill="#1d6b35" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">손목이 위로 젖혀짐</text>
+<text x="370" y="778" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >→ 정상. 이 위치를 사진으로 기록</text>
+<circle cx="70" cy="811" r="5" fill="#a93226"/>
+<text x="86" y="816" font-size="15" text-anchor="start" fill="#a93226" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">손가락만 펴짐</text>
+<text x="370" y="816" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >→ 두 패드를 엄지 쪽으로 1cm</text>
+<circle cx="70" cy="849" r="5" fill="#a93226"/>
+<text x="86" y="854" font-size="15" text-anchor="start" fill="#a93226" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">손목이 새끼손가락 쪽으로 꺾임</text>
+<text x="370" y="854" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >→ 두 패드를 엄지 쪽으로 1cm</text>
+<circle cx="70" cy="887" r="5" fill="#a93226"/>
+<text x="86" y="892" font-size="15" text-anchor="start" fill="#a93226" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">찌릿하기만 하고 안 움직임</text>
+<text x="370" y="892" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >→ 패드 A를 팔꿈치 쪽으로 1cm, 피부에 물 한 방울</text>
+<circle cx="70" cy="925" r="5" fill="#a93226"/>
+<text x="86" y="930" font-size="15" text-anchor="start" fill="#a93226" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">한 점만 콕콕 따가움</text>
+<text x="370" y="930" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >→ 패드가 들떴음. 다시 붙이거나 새 패드</text>
+<circle cx="70" cy="963" r="5" fill="#555"/>
+<text x="86" y="968" font-size="15" text-anchor="start" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">반응이 약하면</text>
+<text x="370" y="968" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >→ 리드 빨강·검정을 서로 바꿔 꽂아 본다</text>
+<text x="60" y="1020" font-size="14" text-anchor="start" fill="#c0392b" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">피할 곳: 팔꿈치 접히는 곳, 뼈 바로 위, 손목 가까운 힘줄 부위, 상처·점 위</text>
+<rect x="1000" y="580" width="475" height="470" rx="14" fill="#fff" stroke="#cfc6b4" stroke-width="1.5"/>
+<text x="1020" y="616" font-size="19" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">나중에: CH2 삼두근 (위팔 뒤)</text>
+<text x="1020" y="640" font-size="13" text-anchor="start" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >팔을 내린 상태에서 뒤에서 본 모습</text>
+<path d="M1170,670 Q1150,830 1175,990 L1300,990 Q1322,830 1300,670 Z" fill="#f3d3bb" stroke="#c99a7a" stroke-width="2.5"/>
+<ellipse cx="1236" cy="830" rx="52" ry="130" fill="#e74c3c33"/>
+<text x="1236" y="662" font-size="13" text-anchor="middle" fill="#7a4d2c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >어깨</text>
+<text x="1236" y="1012" font-size="13" text-anchor="middle" fill="#7a4d2c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >팔꿈치</text>
+<rect x="1213" y="699" width="46" height="112" rx="10" fill="#ffffffcc" stroke="#44617e" stroke-width="3"/>
+<rect x="1219" y="705" width="34" height="100" rx="7" fill="#8fa7bf88"/>
+<text x="1236" y="762" font-size="20" text-anchor="middle" fill="#1e3a56" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">A</text>
+<rect x="1213" y="844" width="46" height="112" rx="10" fill="#ffffffcc" stroke="#44617e" stroke-width="3"/>
+<rect x="1219" y="850" width="34" height="100" rx="7" fill="#8fa7bf88"/>
+<text x="1236" y="907" font-size="20" text-anchor="middle" fill="#1e3a56" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">B</text>
+<text x="1330" y="760" font-size="14" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">5×10cm 패드 2장</text>
+<text x="1330" y="784" font-size="13" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >근육 결 따라 세로로</text>
+<text x="1330" y="830" font-size="13" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >패드 사이 2~3cm</text>
+<text x="1330" y="876" font-size="13" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >팔꿈치에서 손 한 뼘</text>
+<text x="1330" y="896" font-size="13" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >위까지가 근육 중심</text>
+<text x="1020" y="1035" font-size="13" text-anchor="start" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >팔꿈치를 펴며 힘주면 위팔 뒤가 단단해지는 곳</text>
+</svg>

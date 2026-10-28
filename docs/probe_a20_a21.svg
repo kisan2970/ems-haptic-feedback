@@ -1,0 +1,243 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1060" viewBox="0 0 1500 1060">
+<defs><filter id="sh"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.25"/></filter></defs>
+<rect width="1500" height="1060" fill="#ece9e2"/>
+<text x="40" y="50" font-size="28" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">멀티미터로 PhotoMOS 확인하기 — a20 · a21 (CH1)</text>
+<text x="40" y="82" font-size="16" text-anchor="start" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >TENS는 연결하지 않은 상태. 브레드보드 20~21열 근처를 확대한 그림</text>
+<rect x="70" y="240" width="586" height="690" rx="14" fill="#f7f5ef" stroke="#cfc9bb" stroke-width="2" filter="url(#sh)"/>
+<rect x="80" y="619" width="566" height="20" rx="4" fill="#dcd6c8"/>
+<line x1="84" y1="252" x2="642" y2="252" stroke="#d62728" stroke-width="3"/>
+<line x1="84" y1="326" x2="642" y2="326" stroke="#2f6fd6" stroke-width="3"/>
+<text x="90" y="276" font-size="20" text-anchor="middle" fill="#d62728" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">+</text>
+<text x="90" y="314" font-size="20" text-anchor="middle" fill="#2f6fd6" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">−</text>
+<rect x="316" y="348" width="40" height="260" rx="8" fill="#ff8a3d33" stroke="#ff8a3d" stroke-width="2.5" stroke-dasharray="6,4"/>
+<rect x="370" y="348" width="40" height="260" rx="8" fill="#ff8a3d33" stroke="#ff8a3d" stroke-width="2.5" stroke-dasharray="6,4"/>
+<rect x="112" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="112" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="120" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >16</text>
+<text x="120" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >16</text>
+<rect x="166" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="166" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="174" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >17</text>
+<text x="174" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >17</text>
+<rect x="220" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="220" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="228" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >18</text>
+<text x="228" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >18</text>
+<rect x="274" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="274" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="282" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >19</text>
+<text x="282" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >19</text>
+<rect x="328" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="328" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="336" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">20</text>
+<text x="336" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >20</text>
+<rect x="382" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="382" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="390" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">21</text>
+<text x="390" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >21</text>
+<rect x="436" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="436" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="444" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >22</text>
+<text x="444" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >22</text>
+<rect x="490" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="490" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="498" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >23</text>
+<text x="498" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >23</text>
+<rect x="544" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="262" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="544" y="300" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="552" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >24</text>
+<text x="552" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >24</text>
+<rect x="598" y="362" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="416" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="470" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="524" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="578" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="662" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="716" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="770" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="824" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<rect x="598" y="878" width="16" height="16" rx="3" fill="#3b3b3b" stroke="#9b9586" stroke-width="1.5"/>
+<text x="606" y="350" font-size="15" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >25</text>
+<text x="606" y="916" font-size="13" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >25</text>
+<text x="86" y="376" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">a</text>
+<text x="86" y="430" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >b</text>
+<text x="86" y="484" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >c</text>
+<text x="86" y="538" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >d</text>
+<text x="86" y="592" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >e</text>
+<text x="86" y="676" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >f</text>
+<text x="86" y="730" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >g</text>
+<text x="86" y="784" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >h</text>
+<text x="86" y="838" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >i</text>
+<text x="86" y="892" font-size="16" text-anchor="middle" fill="#8a8473" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >j</text>
+<rect x="310" y="575" width="106" height="106" rx="6" fill="#1c1c1c" filter="url(#sh)"/>
+<path d="M310,615 a14,14 0 0 1 0,28" fill="#444"/>
+<circle cx="324" cy="665" r="5" fill="#888"/>
+<text x="363.0" y="626" font-size="17" text-anchor="middle" fill="#eee" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">AQY</text>
+<text x="363.0" y="646" font-size="15" text-anchor="middle" fill="#eee" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">210EH</text>
+<text x="336" y="600" font-size="13" text-anchor="middle" fill="#ffb070" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">4</text>
+<text x="390" y="600" font-size="13" text-anchor="middle" fill="#ffb070" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">3</text>
+<text x="336" y="670" font-size="13" text-anchor="middle" fill="#bbb" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">1</text>
+<text x="390" y="670" font-size="13" text-anchor="middle" fill="#bbb" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">2</text>
+<line x1="120" y1="778" x2="336" y2="778" stroke="#8e44ad" stroke-width="9" stroke-linecap="round" opacity="0.55"/>
+<line x1="498" y1="778" x2="390" y2="778" stroke="#8e44ad" stroke-width="9" stroke-linecap="round" opacity="0.55"/>
+<text x="228" y="812" font-size="12" text-anchor="middle" fill="#7d5a8c" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >(이미 꽂혀 있는 보라 점퍼)</text>
+<path d="M336,370 C336,250 540,150 674,150" fill="none" stroke="#00000044" stroke-width="13" stroke-linecap="round"/>
+<path d="M336,370 C336,250 540,150 674,150" fill="none" stroke="#f1f1f1" stroke-width="9" stroke-linecap="round"/>
+<rect x="330" y="364" width="12" height="12" rx="2" fill="#ccc" stroke="#555"/>
+<rect x="672" y="142" width="28" height="16" rx="3" fill="#222"/>
+<rect x="700" y="148" width="20" height="4" fill="#c9c9c9"/>
+<path d="M390,370 C390,250 540,225 674,225" fill="none" stroke="#00000044" stroke-width="13" stroke-linecap="round"/>
+<path d="M390,370 C390,250 540,225 674,225" fill="none" stroke="#f2c12e" stroke-width="9" stroke-linecap="round"/>
+<rect x="384" y="364" width="12" height="12" rx="2" fill="#ccc" stroke="#555"/>
+<rect x="672" y="217" width="28" height="16" rx="3" fill="#222"/>
+<rect x="700" y="223" width="20" height="4" fill="#c9c9c9"/>
+<text x="332" y="336" font-size="18" text-anchor="end" fill="#c4560f" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">a20</text>
+<text x="396" y="336" font-size="18" text-anchor="start" fill="#c4560f" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">a21</text>
+<text x="560" y="128" font-size="14" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">수-수 점퍼 2개</text>
+<line x1="720" y1="150" x2="760" y2="150" stroke="#bbb" stroke-width="5" stroke-linecap="round"/>
+<rect x="760" y="139" width="92" height="22" rx="9" fill="#d62728"/>
+<circle cx="720" cy="150" r="10" fill="none" stroke="#2e9e4f" stroke-width="3"/>
+<line x1="720" y1="225" x2="760" y2="225" stroke="#bbb" stroke-width="5" stroke-linecap="round"/>
+<rect x="760" y="214" width="92" height="22" rx="9" fill="#222"/>
+<circle cx="720" cy="225" r="10" fill="none" stroke="#2e9e4f" stroke-width="3"/>
+<text x="790" y="116" font-size="14" text-anchor="middle" fill="#1d6b35" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">프로브 끝을 점퍼 핀에 댄다</text>
+<rect x="900" y="200" width="250" height="420" rx="26" fill="#f2b51f" stroke="#a87b10" stroke-width="3" filter="url(#sh)"/>
+<rect x="920" y="218" width="210" height="390" rx="18" fill="#2b2b2b"/>
+<rect x="940" y="238" width="170" height="80" rx="6" fill="#b9c7a9" stroke="#556"/>
+<text x="1025" y="292" font-size="34" text-anchor="middle" fill="#223" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">0.000</text>
+<text x="1090" y="260" font-size="18" fill="#223">🔊</text>
+<circle cx="1025" cy="420" r="62" fill="#3d3d3d" stroke="#111" stroke-width="3"/>
+<text x="953.985916889676" y="384.0" font-size="14" text-anchor="middle" fill="#ddd" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >OFF</text>
+<text x="996.9543482472951" y="347.9452050955555" font-size="14" text-anchor="middle" fill="#ddd" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >V⎓</text>
+<text x="1053.0456517527048" y="347.94520509555554" font-size="14" text-anchor="middle" fill="#ddd" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >V~</text>
+<text x="1096.014083110324" y="384.0" font-size="14" text-anchor="middle" fill="#ddd" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >Ω</text>
+<text x="1102.0547949044444" y="453.0456517527048" font-size="14" text-anchor="middle" fill="#ffd54a" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">🔊</text>
+<text x="1066.0" y="496.01408311032395" font-size="14" text-anchor="middle" fill="#ddd" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >A</text>
+<line x1="1025" y1="420" x2="1076.683094143225" y2="438.81110788291176" stroke="#ffd54a" stroke-width="8" stroke-linecap="round"/>
+<text x="1025" y="524" font-size="13" text-anchor="middle" fill="#ffd54a" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">다이얼 → 부저(🔊 또는 •)))</text>
+<circle cx="960" cy="570" r="15" fill="#111" stroke="#888" stroke-width="4"/>
+<text x="960" y="605" font-size="13" text-anchor="middle" fill="#eee" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">10A</text>
+<circle cx="1025" cy="570" r="15" fill="#111" stroke="#111" stroke-width="4"/>
+<text x="1025" y="605" font-size="13" text-anchor="middle" fill="#eee" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">COM</text>
+<circle cx="1090" cy="570" r="15" fill="#111" stroke="#d62728" stroke-width="4"/>
+<text x="1090" y="605" font-size="13" text-anchor="middle" fill="#eee" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">VΩ</text>
+<line x1="948" y1="558" x2="972" y2="582" stroke="#e74c3c" stroke-width="4"/><line x1="972" y1="558" x2="948" y2="582" stroke="#e74c3c" stroke-width="4"/>
+<path d="M852,150 C912,150 860,760 1090,720 S1090,630 1090,585" fill="none" stroke="#d62728" stroke-width="6"/>
+<path d="M852,225 C892,225 840,730 1025,705 S1025,630 1025,585" fill="none" stroke="#222" stroke-width="6"/>
+<text x="1025" y="748" font-size="14" text-anchor="middle" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">검정 → COM, 빨강 → VΩ</text>
+<text x="1025" y="768" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">10A 구멍은 쓰지 않는다</text>
+<rect x="1180" y="200" width="295" height="420" rx="12" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>
+<text x="1198" y="234" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">왜 a20·a21인가</text>
+<text x="1198" y="259" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >세로줄 a~e 다섯 칸은</text>
+<text x="1198" y="284" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >보드 안에서 서로 이어져 있다.</text>
+<text x="1198" y="309" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >그래서 a20 = PhotoMOS 4번,</text>
+<text x="1198" y="334" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >a21 = PhotoMOS 3번과 같은 점.</text>
+<text x="1198" y="359" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" ></text>
+<text x="1198" y="384" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">PhotoMOS는 스위치다</text>
+<text x="1198" y="409" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >켜지면 3번·4번이 연결되어</text>
+<text x="1198" y="434" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >멀티미터가 삐 하고 운다.</text>
+<text x="1198" y="459" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >꺼지면 끊겨서 조용하다.</text>
+<text x="1198" y="484" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" ></text>
+<text x="1198" y="509" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">프로브가 구멍에 안 들어가면</text>
+<text x="1198" y="534" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >수-수 점퍼를 a20·a21에 꽂고</text>
+<text x="1198" y="559" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >점퍼 반대쪽 핀에 댄다.</text>
+<text x="1198" y="584" font-size="14" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >악어클립이 있으면 물리면 편하다.</text>
+<rect x="690" y="790" width="785" height="262" rx="12" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>
+<text x="710" y="826" font-size="20" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">순서</text>
+<text x="714" y="860" font-size="14.5" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >1. 멀티미터 검정 리드 → COM, 빨강 리드 → VΩ. 다이얼을 부저(🔊)로.</text>
+<text x="714" y="886" font-size="14.5" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >2. 리드 끝 두 개를 서로 맞대 본다 → 삐 소리가 나면 멀티미터 정상.</text>
+<text x="714" y="912" font-size="14.5" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >3. 수-수 점퍼 2개를 a20, a21에 꽂고, 빨강·검정 프로브를 각각 점퍼 끝에 댄다.</text>
+<text x="714" y="938" font-size="14.5" text-anchor="start" fill="#7a7a7a" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >   (지금은 조용해야 정상. 소리가 나면 PhotoMOS가 계속 켜진 것이니 알려 주기)</text>
+<text x="714" y="964" font-size="14.5" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >4. 터미널에서 실행:  python C:\Users\wotjr\ems-recoil-sim\tools\ssr_blink.py COM11 1</text>
+<text x="714" y="990" font-size="14.5" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >5. 화면에 "켬"이 뜬 2초 → 삐,  "끔"이 뜬 2초 → 조용.  8번 반복되면 CH1 정상.</text>
+<text x="714" y="1016" font-size="14.5" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" >6. CH2는 a50 · a51에 같은 방법으로 대고, 명령 끝의 1을 2로 바꿔 실행.</text>
+<text x="714" y="1046" font-size="14" text-anchor="start" fill="#1d6b35" font-family="Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">빨강·검정 방향은 상관없다. 부저 모드는 연결됐는지만 본다.</text>
+</svg>

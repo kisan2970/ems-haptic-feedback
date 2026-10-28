@@ -282,8 +282,10 @@ void setup() {
 
 void loop() {
   wdt_reset();
-  uint32_t now = millis();
   readSerial();
+  // 명령 처리 뒤에 시각을 읽는다. 앞에서 읽으면 명령이 기록한 시각이 now보다 커져
+  // (now - t) 부호 없는 뺄셈이 뒤집히고, 자극이 즉시 끝나거나 하트비트 끊김으로 오판한다.
+  uint32_t now = millis();
 
   // --- 시스템 안전 감시 ---
   if ((estopFlag || digitalRead(PIN_ESTOP) == LOW) && sys != SYS_FAULT) enterFault(1);

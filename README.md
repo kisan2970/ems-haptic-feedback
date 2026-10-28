@@ -27,12 +27,15 @@
 
 ```
 ├── README.md                                   설계서 (이 문서)
+├── SUMMARY.md                                  진행 요약 (결정·검증·다음 단계)
 ├── GUIDE.md                                    완주 가이드 (단계별 절차와 통과 기준)
 ├── BRIEF.md                                    프로젝트 브리핑 (결정 근거 요약)
 ├── references.md                               관련 논문 목록
 ├── docs/wiring_ch1_uno.png / .svg              CH1 배선도 v2
 ├── docs/breadboard_830.png / BREADBOARD.md     830홀 브레드보드 실물 배치도 + 꽂는 위치 목록
 ├── docs/breadboard_830_simple.png / BREADBOARD_simple.md   간소화판 (키스위치·부저·실험자 E-STOP 생략)
+├── docs/pad_placement.png                       전극 패드 붙이는 위치
+├── docs/probe_a20_a21.png                       멀티미터로 PhotoMOS 확인하는 법
 ├── firmware/ems_recoil/ems_recoil.ino          Arduino Uno 펌웨어 v2 (반동 + 무게)
 ├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 (v1 구조, VR 단계용)
 ├── processing/EMSRecoilSim/EMSRecoilSim.pde    시연 화면 (총 / 들기 / 벽 모드)
@@ -44,8 +47,9 @@
 - [x] 설계 (회로, 안전 구조, 프로토콜, 매핑)
 - [x] 펌웨어 v1 우노 업로드 및 시리얼 응답 검증
 - [x] TENS 기기 단독 확인 (Width 300µs, 근수축 체감)
-- [x] 펌웨어 v2 (반동 + 무게) 컴파일
-- [ ] 브레드보드 회로 조립, LED 검사
+- [x] 펌웨어 v2 (반동 + 무게), 시간 계산 버그 수정
+- [x] 브레드보드 회로 조립 (간소화판), 자동 점검 12/12, CH1 PhotoMOS 확인
+- [x] Processing 공 2개 블라인드 무게 비교 모드
 - [ ] 벤치 검사 (저항 부하, 안전장치 9종)
 - [ ] 본인 캘리브레이션, 시연, 발표
 

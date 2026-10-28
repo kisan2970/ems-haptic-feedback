@@ -3,6 +3,8 @@
 //   [1] 총 모드  : 클릭 또는 F -> 반동 (CH1 손목 신전근 짧게)
 //   [2] 들기 모드: P로 물체 들기/내려놓기, Z/X/C 무게 선택 -> 들고 있는 동안 계속 자극
 //   [3] 벽 모드  : IMU로 손을 뻗어 벽에 부딪히면 반동
+//   [4] 공 비교  : 똑같이 생긴 공 2개 중 하나만 무겁다 (블라인드 테스트)
+//                  공 클릭 = 들기/내려놓기, H = 무거운 공 다시 섞기, J/K = 참가자 답(공1/공2가 무겁다), V = 정답 보기
 // 공통: A 아밍, SPACE 전부 정지, R FAULT 해제, T 테스트 반동 100ms
 import processing.serial.*;
 
@@ -21,8 +23,16 @@ final String[] W_NAME = { "가벼움", "보통", "무거움" };
 final int[]    W_MASK = { 0, 1, 3 };      // 0 = 자극 없음, 1 = CH1, 3 = CH1 + CH2(삼두근)
 final float[]  W_FOLLOW = { 0.45, 0.18, 0.07 };
 final float PITCH_MIN = -50, PITCH_MAX = 50;
+// ---- 공 비교 ----
+final int   HEAVY_MASK = 1;               // 지금은 CH1만. CH2(삼두근)를 붙이면 3으로 바꾸면 더 무거워짐
+final float BALL_FOLLOW_LIGHT = 0.45, BALL_FOLLOW_HEAVY = 0.07;
+final float[] BALL_X = { 330, 670 };
 
-int mode = 1;                // 1 총, 2 들기, 3 벽
+int mode = 1;                // 1 총, 2 들기, 3 벽, 4 공 비교
+int ballHeld = -1, heavyIdx = 1, holdStart = 0;
+boolean reveal = false;
+int trials = 0, correct = 0;
+float ballLiftY = 0;
 int weight = 1;
 boolean holding = false;
 int lastHold = 0, lastHb = 0, lastTrig = 0;
@@ -50,10 +60,14 @@ void draw() {
   if (mode == 2 && holding && now - lastHold > 100) {
     send("W," + W_MASK[weight]); lastHold = now;
   }
+  if (mode == 4 && ballHeld >= 0 && now - lastHold > 100) {
+    send("W," + (ballHeld == heavyIdx ? HEAVY_MASK : 0)); lastHold = now;
+  }
   background(22);
   if (mode == 1) drawGun();
   else if (mode == 2) drawLift();
-  else drawWall();
+  else if (mode == 3) drawWall();
+  else drawBalls();
   drawHud();
 }
 
@@ -110,6 +124,54 @@ void toggleHold() {
   lastHold = 0;
 }
 
+// ================= 공 비교 모드 =================
+void drawBalls() {
+  float tableY = height * 0.78;
+  stroke(110); strokeWeight(5); line(150, tableY + 32, 850, tableY + 32); noStroke();
+  float target = constrain(map(pitch, PITCH_MIN, PITCH_MAX, 0, 1), 0, 1);
+  float follow = (ballHeld == heavyIdx) ? BALL_FOLLOW_HEAVY : BALL_FOLLOW_LIGHT;
+  ballLiftY = (ballHeld >= 0) ? lerp(ballLiftY, target, follow) : lerp(ballLiftY, 0, 0.3);
+  for (int i = 0; i < 2; i++) {
+    float bx = BALL_X[i];
+    float by = (ballHeld == i) ? map(ballLiftY, 0, 1, tableY, height * 0.22) : tableY;
+    if (ballHeld == i) { fill(240, 200, 170); ellipse(bx, by + 34, 110, 34); }
+    fill(ballHeld == i ? color(230, 140, 60) : color(210, 120, 50));
+    ellipse(bx, by, 64, 64);
+    stroke(255, 255, 255, 120); strokeWeight(3); noFill(); arc(bx, by, 64, 64, -PI * 0.9, -PI * 0.3); noStroke();
+    fill(255); textSize(20); textAlign(CENTER); text("공 " + (i + 1), bx, tableY + 70);
+    if (reveal) { fill(i == heavyIdx ? color(255, 120, 100) : color(140, 220, 160)); text(i == heavyIdx ? "무거움" : "가벼움", bx, tableY + 96); }
+    textAlign(LEFT);
+  }
+  if (ballHeld >= 0) {
+    float left = max(0, 5.0 - (millis() - holdStart) / 1000.0);
+    fill(80); rect(40, 120, 200, 12, 6); fill(left < 1.5 ? color(230, 90, 70) : color(120, 200, 140)); rect(40, 120, 200 * left / 5.0, 12, 6);
+    fill(220); textSize(14); text("들고 있는 시간 (최대 5초)", 250, 131);
+  }
+  fill(255); textSize(16);
+  text("공 클릭 = 들기/내려놓기   H = 섞기   J/K = 답(공1/공2가 무겁다)   V = 정답 보기", 40, height - 60);
+  text("시도 " + trials + "회   정답 " + correct + "회" + (trials > 0 ? "  (" + round(100.0 * correct / trials) + "%)" : ""), 40, 110);
+}
+void pickBall(int i) {
+  if (ballHeld == i) { ballHeld = -1; send("W,0"); return; }
+  if (ballHeld >= 0) send("W,0");
+  ballHeld = i; holdStart = millis(); lastHold = 0;
+}
+void shuffleBalls() {
+  if (ballHeld >= 0) { ballHeld = -1; send("W,0"); }
+  heavyIdx = int(random(2)); reveal = false;
+  lastMsg = "섞음 (정답은 V로 확인)";
+}
+void answer(int guess) {
+  trials++; boolean ok = (guess == heavyIdx); if (ok) correct++;
+  String row = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + " " + nf(hour(), 2) + ":" + nf(minute(), 2) + ":" + nf(second(), 2)
+             + "," + trials + "," + (heavyIdx + 1) + "," + (guess + 1) + "," + (ok ? 1 : 0) + "," + HEAVY_MASK;
+  String[] old = loadStrings("ball_results.csv");
+  if (old == null) old = new String[] { "time,trial,heavy_ball,guess,correct,heavy_mask" };
+  saveStrings("ball_results.csv", append(old, row));
+  lastMsg = "답 기록: 공" + (guess + 1) + (ok ? " 정답" : " 오답");
+  shuffleBalls();
+}
+
 // ================= 벽 모드 =================
 void drawWall() {
   float wx = WALL_X * width;
@@ -137,12 +199,12 @@ void updateWall() {
 // ================= 공통 =================
 void drawHud() {
   fill(255); textSize(22);
-  String[] names = { "", "[1] 총 반동", "[2] 물체 무게", "[3] 벽 충돌" };
+  String[] names = { "", "[1] 총 반동", "[2] 물체 무게", "[3] 벽 충돌", "[4] 공 무게 비교" };
   text(names[mode], 40, 50);
   textSize(14); fill(200);
   String st = devState == 9 ? "FAULT" : devState == 2 ? "자극 중" : devState == 1 ? "ARMED" : "IDLE";
   text("장치: " + st + "    pitch " + nf(pitch, 1, 1) + "    마지막 응답: " + lastMsg, 40, 76);
-  text("A 아밍  SPACE 정지  R 해제  T 테스트  1/2/3 모드", 40, height - 25);
+  text("A 아밍  SPACE 정지  R 해제  T 테스트  1/2/3/4 모드", 40, height - 25);
   if (devState == 2) { fill(255, 80, 80); ellipse(width - 40, 40, 24, 24); }
 }
 
@@ -155,15 +217,20 @@ void serialEvent(Serial p) {
     if (mode == 3) updateWall();
   } else {
     lastMsg = body;
-    if (body.startsWith("E,11") || body.startsWith("E,13")) holding = false;   // 최대 시간 도달 -> 자동 내려놓기
+    if (body.startsWith("E,11") || body.startsWith("E,13")) { holding = false; ballHeld = -1; }   // 최대 시간 도달 -> 자동 내려놓기
   }
 }
 
-void mousePressed() { if (mode == 1) fireGun(); }
+void mousePressed() {
+  if (mode == 1) fireGun();
+  else if (mode == 4) {
+    for (int i = 0; i < 2; i++) if (abs(mouseX - BALL_X[i]) < 90) pickBall(i);
+  }
+}
 
 void keyPressed() {
   if (key == 'a' || key == 'A') send("A,1");
-  else if (key == ' ') { holding = false; send("X"); }
+  else if (key == ' ') { holding = false; ballHeld = -1; send("X"); }
   else if (key == 'r' || key == 'R') send("R");
   else if (key == 't' || key == 'T') send("T,1,100,100,0");
   else if (key == 'f' || key == 'F') { if (mode == 1) fireGun(); }
@@ -171,8 +238,12 @@ void keyPressed() {
   else if (key == 'z' || key == 'Z') weight = 0;
   else if (key == 'x' || key == 'X') weight = 1;
   else if (key == 'c' || key == 'C') weight = 2;
-  else if (key >= '1' && key <= '3') {
-    if (holding) { holding = false; send("W,0"); }
+  else if (key == 'h' || key == 'H') { if (mode == 4) shuffleBalls(); }
+  else if (key == 'v' || key == 'V') { if (mode == 4) reveal = !reveal; }
+  else if (key == 'j' || key == 'J') { if (mode == 4) answer(0); }
+  else if (key == 'k' || key == 'K') { if (mode == 4) answer(1); }
+  else if (key >= '1' && key <= '4') {
+    if (holding || ballHeld >= 0) { holding = false; ballHeld = -1; send("W,0"); }
     mode = key - '0';
   }
 }

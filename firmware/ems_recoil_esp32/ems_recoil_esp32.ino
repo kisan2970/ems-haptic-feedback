@@ -218,8 +218,8 @@ void setup() {
 
 void loop() {
   esp_task_wdt_reset();
-  uint32_t now = millis();
   readSerial();
+  uint32_t now = millis();   // 명령 처리 뒤에 읽어야 (now - t) 뺄셈이 뒤집히지 않는다
 
   if ((estopFlag || digitalRead(PIN_ESTOP) == LOW) && state != ST_FAULT) enterFault(1);
   if (state != ST_FAULT && state != ST_IDLE && digitalRead(PIN_ARM) == HIGH) {
