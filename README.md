@@ -39,6 +39,7 @@
 ├── docs/breadboard_830_simple.png / BREADBOARD_simple.md   간소화판 (키스위치·부저·실험자 E-STOP 생략)
 ├── docs/pad_placement.png                       전극 패드 붙이는 위치
 ├── docs/probe_a20_a21.png                       멀티미터로 PhotoMOS 확인하는 법
+├── docs/output_wiring_simple.png                출력부(리드선 → PhotoMOS → 참가자 STOP → 패드) 실물 연결
 ├── firmware/ems_recoil/ems_recoil.ino          Arduino Uno 펌웨어 v2 (반동 + 무게)
 ├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 v2.1 (우노와 같은 로직, KA는 GPIO32/33, VR 단계용)
 ├── processing/EMSRecoilSim/EMSRecoilSim.pde    시연 화면 (총 / 들기 / 벽 모드)

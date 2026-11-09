@@ -90,4 +90,4 @@
 3. 저항·커패시터 → 트랜지스터 → 보드 안 점퍼 순서.
 4. 우노 신호선(D9, D4, D5)을 꽂고 GUIDE.md 4.3 LED 검사.
 5. 통과하면 CH2를 30열 오른쪽에 똑같이 복제 (D10, D7, D6).
-6. 마지막에 참가자 STOP·TENS 출력(주황). 실험자는 SPACE 키를 맡는다.
+6. 마지막에 참가자 STOP·TENS 출력(주황). 실험자는 SPACE 키를 맡는다. 리드선 연결은 [output_wiring_simple.png](output_wiring_simple.png).
