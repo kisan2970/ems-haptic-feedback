@@ -55,6 +55,7 @@ RES = {
     '1MΩ': ['brown', 'black', 'black', 'yellow', 'brown'],
     '500kΩ': ['green', 'black', 'black', 'orange', 'brown'],
     '470kΩ': ['yellow', 'violet', 'black', 'orange', 'brown'],
+    '470Ω': ['yellow', 'violet', 'black', 'black', 'brown'],
 }
 
 def pin_end(x, y):
@@ -145,7 +146,7 @@ a(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 
 a('<defs><linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e74a8"/><stop offset="1" stop-color="#155a85"/></linearGradient>'
   '<filter id="sh" x="-5%" y="-5%" width="110%" height="115%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.25"/></filter></defs>')
 a(f'<rect width="{W}" height="{H}" fill="#e9e6df"/>')
-text(40, 44, '브레드보드 실물 배치도 (830홀) — 아두이노 우노 · 2채널 v2' + (' · 간소화판' if SIMPLE else ''), 26, 'start', bold=True)
+text(40, 44, '브레드보드 실물 배치도 (830홀) — 아두이노 우노 · 2채널 v2.2 (강도 사다리)' + (' · 간소화판' if SIMPLE else ''), 26, 'start', bold=True)
 if SIMPLE: text(40, 96, '키스위치 · 부저 · 실험자 E-STOP 생략', 14, 'start', c='#c0392b', bold=True)
 text(40, 70, '총 반동 + 물체 무게 · 위에서 내려다본 모습 · 구멍 위치는 docs/BREADBOARD' + SUF + '.md 목록과 같음', 14, 'start', c='#555')
 
@@ -165,14 +166,17 @@ for c in [1] + list(range(5, 64, 5)):
     text(cx(c), 389, str(c), 9, c='#8a8473'); text(cx(c), 646, str(c), 9, c='#8a8473')
 for r, y in ROW.items():
     text(bx0 + 16, y + 4, r, 10, c='#8a8473'); text(bx1 - 16, y + 4, r, 10, c='#8a8473')
-text(cx(16.5), 514, 'CH1 · 손목 신전근', 10, c='#6b6455', bold=True)
-text(cx(46.5), 514, 'CH2 · 삼두근', 10, c='#6b6455', bold=True)
-for c0 in (20, 50):
-    a(f'<rect x="{cx(c0)-11}" y="390" width="{2*P}" height="106" rx="4" fill="#ff8a3d22" stroke="#e8731a" stroke-width="1.5" stroke-dasharray="4,3"/>')
-    text(cx(c0) + 11, 383, 'TENS 전용', 9.5, c='#c4560f', bold=True)
+text(cx(3.6), 514, 'CH1 · 손목 신전근', 10, c='#6b6455', bold=True)
+text(cx(31), 514, 'CH1 ◀  ▶ CH2', 10, c='#6b6455', bold=True)
+text(cx(60.6), 514, 'CH2 · 삼두근', 10, c='#6b6455', bold=True)
+for c0 in (17, 47):   # 위쪽 a~e 17~27열 (CH2는 47~57열): 게이팅 PhotoMOS + 강도 사다리, TENS 전용
+    a(f'<rect x="{cx(c0)-11}" y="390" width="{11*P}" height="106" rx="4" fill="#ff8a3d22" stroke="#e8731a" stroke-width="1.5" stroke-dasharray="4,3"/>')
+    text(cx(c0 + 5), 383, 'TENS 전용 (게이팅 + 강도 사다리)', 9.5, c='#c4560f', bold=True)
 
 # ------------------------------------------------------------------ channels
 YEL, GRN, BLU, RED, BLK = '#f2c12e', '#2e9e4f', '#2f6fd6', '#d62728', '#222'
+TEAL = '#17a2b8'
+OR1, OR2 = '#ee7a1d', '#b5530f'
 def channel(o, ch, ka_hole):
     qk = 'Q3' if o == 0 else 'Q4'; qg = 'Q1' if o == 0 else 'Q2'
     # ---- 위쪽: 유지 신호 → Q3 → 555 타이밍
@@ -205,8 +209,30 @@ def channel(o, ch, ka_hole):
     resistor(f'i{24+o}', f'i{28+o}', '1kΩ', ch, lab_off=(0, 14))
     use(f'g{28+o}'); steps.append((ch, '게이트 선 도착점', f'g{28+o}'))
     resistor(f'j{28+o}', f'B-{28+o}', '10kΩ', ch, lab_off=(24, 2))
-    use(f'a{20+o}'); use(f'a{21+o}')
-    steps.append((ch, 'TENS 출력 (주황)', f'a{21+o} ← TENS 리드 A(잘라서), a{20+o} → 비상정지 NC → 참가자 STOP NC → 패드 A'))
+    # ---- 강도 사다리 (위쪽 = TENS 쪽, 아래쪽 = PhotoMOS LED 구동)
+    #  경로: a21 ← 리드 A → 게이팅 PhotoMOS → 20열(N0) → R1 470Ω → 17열(N1) → R2 1kΩ → 26열(N2) → STOP
+    #  LA(17·18열)가 R1을, LB(26·27열)가 R2를 건너뛴다. 바이패스가 꺼지면 저항이 들어가 약해진다.
+    pa, pb = ('D11', 'D12') if o == 0 else ('A0', 'A1')
+    dip(17 + o, 2, 'AQY', ch, '4  3')
+    steps[-1] = (ch, 'AQY210EH LA: R1 바이패스 (홈이 왼쪽)', steps[-1][2])
+    dip(26 + o, 2, 'AQY', ch, '4  3')
+    steps[-1] = (ch, 'AQY210EH LB: R2 바이패스 (홈이 왼쪽)', steps[-1][2])
+    jumper(f'c{18+o}', f'c{20+o}', OR1, ch, f'LA 3번 → 게이팅 출력 {20+o}열')
+    resistor(f'b{17+o}', f'b{20+o}', '470Ω', ch, lab_off=(0, -11))
+    steps[-1] = (ch, '저항 470Ω (R1, 사다리)', steps[-1][2])
+    jumper(f'a{17+o}', f'a{23+o}', OR1, ch, f'{17+o}열 → {23+o}열 (R1과 R2 사이)')
+    resistor(f'b{23+o}', f'b{26+o}', '1kΩ', ch, lab_off=(0, -11))
+    steps[-1] = (ch, '저항 1kΩ (R2, 사다리)', steps[-1][2])
+    jumper(f'c{23+o}', f'c{27+o}', OR1, ch, f'LB 3번 → {23+o}열')
+    use(f'j{14+o}'); steps.append((ch, f'사다리 선 도착점 ({pa}, R1 바이패스)', f'j{14+o}'))
+    resistor(f'i{14+o}', f'i{17+o}', '330Ω', ch, lab_off=(0, 14))
+    jumper(f'j{18+o}', f'B-{18+o}', BLK, ch, 'LA 2번 → GND')
+    use(f'j{22+o}'); steps.append((ch, f'사다리 선 도착점 ({pb}, R2 바이패스)', f'j{22+o}'))
+    resistor(f'g{22+o}', f'g{26+o}', '330Ω', ch, lab_off=(0, -11))
+    jumper(f'j{27+o}', f'B-{27+o}', BLK, ch, 'LB 2번 → GND')
+    use(f'a{21+o}'); use(f'a{26+o}')
+    steps.append((ch, 'TENS 출력 (주황)', f'a{21+o} ← TENS 리드 A(잘라서), a{26+o} → '
+                  + ('' if SIMPLE else '비상정지 NC → ') + '참가자 STOP NC → 패드 A'))
 
 channel(0, 'CH1', 'a3')
 channel(30, 'CH2', 'e33')
@@ -269,7 +295,17 @@ flex(RP('D5'), hole('g28'), BLU, (480, 820), (1114, 810))
 flex(RP('D6'), hole('g58'), BLU, (560, 880), (1774, 850))
 for n, col in [('D10', '#7a5c00'), ('D7', '#1d6b35'), ('D6', '#1f4f9e'), ('D5', '#1f4f9e'), ('D4', '#1d6b35')]:
     wtext(372, RIGHT[n] - 4, n, 11, 'start', c=col, bold=True)
-steps.append(('공통', '우노 신호선', 'D9 → a3, D4 → j8, D5 → g28 (CH1) / D10 → e33, D7 → j38, D6 → g58 (CH2)'))
+flex(RP('D11'), hole('j14'), TEAL, (420, 462), (640, 760))
+flex(RP('D12'), hole('j22'), TEAL, (440, 440), (820, 770))
+for pin, dst, lane in (('A0', 'j44', 0), ('A1', 'j52', 1)):   # 우노 왼쪽 헤더 → 왼쪽으로 돌아 보드 아래(IMU 위)로
+    (x1, y1), (x2, y2) = LP(pin), hole(dst)
+    xl, yb = 18 - lane * 8, 784 + lane * 10
+    flexpath(f'M{x1},{y1} L{xl+10},{y1} Q{xl},{y1} {xl},{y1+10} L{xl},{yb-10} Q{xl},{yb} {xl+10},{yb} '
+             f'L{x2-10},{yb} Q{x2},{yb} {x2},{yb-10} L{x2},{y2}', TEAL)
+    wires.append(pin_end(x1, y1)); wires.append(pin_end(x2, y2))
+for n in ('D11', 'D12'):
+    wtext(372, RIGHT[n] - 4, n, 11, 'start', c='#0f6f80', bold=True)
+steps.append(('공통', '우노 신호선', 'D9 → a3, D4 → j8, D5 → g28, D11 → j14, D12 → j22 (CH1) / D10 → e33, D7 → j38, D6 → g58, A0 → j44, A1 → j52 (CH2)'))
 
 # ------------------------------------------------------------------ 패널 부품 (아래)
 if not SIMPLE:
@@ -300,7 +336,6 @@ else:
     steps.append(('공통', 'D2, D8', '비워 둔다 (실험자 E-STOP, 부저 생략)'))
 
 # ------------------------------------------------------------------ 출력부 (위 오른쪽)
-OR1, OR2 = '#ee7a1d', '#b5530f'
 # TENS
 a('<rect x="1050" y="96" width="180" height="150" rx="16" fill="#f7f7f5" stroke="#9a9a9a" stroke-width="2" filter="url(#sh)"/>')
 a('<rect x="1072" y="112" width="136" height="54" rx="4" fill="#b9c7a9" stroke="#666"/>')
@@ -353,36 +388,36 @@ flex((1108, 246), P1B, OR1, (1120, 300), (1740, 320), end2_pin=False)
 flex(PS['NC2'][1], P2A, OR2, (1596, 290), (1900, 300), end2_pin=False)
 flex((1188, 246), P2B, OR2, (1200, 320), (1900, 330), end2_pin=False)
 if SIMPLE:
-    flex(hole('a20'), PS['NC1'][0], OR1, (938, 280), (1504, 290))
-    flex(hole('a50'), PS['NC2'][0], OR2, (1598, 270), (1562, 300))
-    steps.append(('공통', '참가자 STOP (2NC)', 'NC1: a20 ↔ CH1 패드 A, NC2: a50 ↔ CH2 패드 A'))
+    flex(hole('a26'), PS['NC1'][0], OR1, (1070, 280), (1504, 290))
+    flex(hole('a56'), PS['NC2'][0], OR2, (1730, 270), (1562, 300))
+    steps.append(('공통', '참가자 STOP (2NC)', 'NC1: a26 ↔ CH1 패드 A, NC2: a56 ↔ CH2 패드 A'))
 else:
-    flex(hole('a20'), ES['NC1'][0], OR1, (938, 280), (1304, 290))
+    flex(hole('a26'), ES['NC1'][0], OR1, (1070, 280), (1304, 290))
     flex(ES['NC1'][1], PS['NC1'][0], OR1, (1330, 280), (1504, 280))
-    flex(hole('a50'), ES['NC2'][0], OR2, (1598, 270), (1354, 300))
+    flex(hole('a56'), ES['NC2'][0], OR2, (1730, 270), (1354, 300))
     flex(ES['NC2'][1], PS['NC2'][0], OR2, (1380, 280), (1562, 290))
     # E-STOP NO (저전압): D2와 GND
     flexpath(f'M345,670 Q400,670 400,725 L400,1210 Q400,1232 422,1232 L1963,1232 Q1985,1232 1985,1210 L1985,322 Q1985,300 1963,300 L1426,300 Q1404,300 1404,280 L1404,{ES["NO"][0][1]}', '#7f8c8d')
     wires.append(pin_end(*RP('D2'))); wires.append(pin_end(*ES['NO'][0]))
     flex(ES['NO'][1], hole('T-57'), BLK, (1440, 290), (1752, 280)); used.add('T-57')
-    steps.append(('공통', '실험자 E-STOP', 'NC1: a20 ↔ 참가자 NC1 (CH1), NC2: a50 ↔ 참가자 NC2 (CH2), NO: 우노 D2 ↔ 위 − 레일 57열'))
+    steps.append(('공통', '실험자 E-STOP', 'NC1: a26 ↔ 참가자 NC1 (CH1), NC2: a56 ↔ 참가자 NC2 (CH2), NO: 우노 D2 ↔ 위 − 레일 57열'))
     steps.append(('공통', '참가자 STOP', 'NC1: E-STOP NC1 ↔ CH1 패드 A, NC2: E-STOP NC2 ↔ CH2 패드 A'))
 
 # ------------------------------------------------------------------ 범례·주의
 a('<rect x="1010" y="850" width="955" height="265" rx="10" fill="#ffffff" stroke="#bdb6a6" stroke-width="1.5"/>')
 text(1030, 878, '범례 · 꼭 지킬 것', 16, 'start', bold=True)
-leg = [(RED, '5V'), (BLK, 'GND'), (YEL, '유지 신호 D9/D10'), (GRN, '트리거 D4/D7'), (BLU, '게이트 D5/D6'), ('#8e44ad', '보드 안 연결'), (OR1, 'TENS 출력 (사람에게 가는 선)')]
+leg = [(RED, '5V'), (BLK, 'GND'), (YEL, '유지 신호 D9/D10'), (GRN, '트리거 D4/D7'), (BLU, '게이트 D5/D6'), (TEAL, '사다리 D11/D12/A0/A1'), ('#8e44ad', '보드 안'), (OR1, 'TENS 출력 (사람에게)')]
 lx = 1030
 for col, t in leg:
     a(f'<line x1="{lx}" y1="900" x2="{lx+26}" y2="900" stroke="{col}" stroke-width="6" stroke-linecap="round"/>')
-    text(lx + 32, 904, t, 11.5, 'start'); lx += 32 + len(t) * 10.5 + 18
+    text(lx + 32, 904, t, 11.5, 'start'); lx += 32 + len(t) * 7.6 + 12
 notes = [
-    '1. 주황 점선 칸(20·21열, 50·51열의 위쪽 a~e)은 TENS 전용. 다른 부품·선 금지, 그 위의 레일 구멍(20~24, 50~54열)도 비워 둔다.',
+    '1. 주황 점선 칸(17~27열, 47~57열의 위쪽 a~e)은 TENS 전용. 사다리 부품 말고 다른 부품·선 금지, 그 위의 레일 구멍도 비워 둔다.',
     '2. 2N3904는 평평한 면이 가운데 홈 쪽. 노란 글자 E·B·C가 다리 위치다 (Q3·Q4는 E-B-C, Q1·Q2는 C-B-E 순서로 보임).',
     '3. TLC555와 AQY210EH는 홈(반달)이 왼쪽, 점이 1번 핀. 칩 아래쪽 줄(f)이 1번부터 시작한다.',
     ('4. 간소화판: D3은 GND에 상시 연결, D2·D8은 비워 둔다. 참가자 STOP(2NC)이 두 채널을 끊고, 실험자는 SPACE 키(전부 정지)를 맡는다.' if SIMPLE else
      '4. 2채널을 비상정지 하나로 동시에 끊으려면 E-STOP에 NC 접점 블록 1개를 추가하고, 참가자 STOP도 2NC로 준비한다.'),
-    '5. 첫 테스트는 TENS 대신 a20·a21에 건전지 + LED + 1kΩ을 걸어 깜빡임만 본다. 우노 GND와 연결하지 않는다.',
+    '5. 첫 테스트는 TENS 대신 a21·a26에 건전지 + LED + 1kΩ을 걸어 깜빡임만 본다. 강도 단계는 $L,1,0~3, 부팅 시 3(노브 세기).',
     '6. 전극은 팔에만. 가슴·목·머리 금지, 양팔에 걸친 배치 금지. 사람 연결은 GUIDE.md 벤치 검사 통과 후.',
     '7. 꽂는 위치 전체 목록: docs/BREADBOARD' + SUF + '.md',
 ]
@@ -409,6 +444,7 @@ md += ['## 조립 순서', '',
        '3. 저항·커패시터 → 트랜지스터 → 보드 안 점퍼 순서.',
        '4. 우노 신호선(D9, D4, D5)을 꽂고 GUIDE.md 4.3 LED 검사.',
        '5. 통과하면 CH2를 30열 오른쪽에 똑같이 복제 (D10, D7, D6).',
+       '5-1. 강도 사다리 (v2.2): 채널마다 AQY 2개(LA·LB), 470Ω·1kΩ, 330Ω 2개, 점퍼. 우노 D11·D12(CH1), A0·A1(CH2). TENS 없이 `ladder_test.py`로 먼저 확인.',
        ('6. 마지막에 참가자 STOP·TENS 출력(주황). 실험자는 SPACE 키를 맡는다. 리드선 연결은 [output_wiring_simple.png](output_wiring_simple.png).' if SIMPLE else '6. 마지막에 비상정지·참가자 STOP·TENS 출력(주황).'), '']
 io.open(os.path.join(DOCS, 'BREADBOARD' + SUF + '.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(md))
 print('ok', len(used), 'holes')

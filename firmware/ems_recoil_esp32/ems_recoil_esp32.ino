@@ -1,7 +1,7 @@
 /*
- * ems_recoil_esp32.ino  v2.1  -  EMS 근자극 기반 반동 + 무게감 피드백 펌웨어 (ESP32 DevKit V1, 30핀)
+ * ems_recoil_esp32.ino  v2.2  -  EMS 근자극 기반 반동 + 무게감 피드백 펌웨어 (ESP32 DevKit V1, 30핀)
  * 보드: ESP32 Dev Module / DOIT ESP32 DEVKIT V1 (WROOM-32), Serial 115200, arduino-esp32 코어 3.x
- * 우노 v2.1(ems_recoil.ino)과 로직·프로토콜·안전 한계가 같다. 핀과 워치독·인터럽트만 다르다.
+ * 우노 v2.2(ems_recoil.ino)과 로직·프로토콜·안전 한계가 같다. 핀과 워치독·인터럽트만 다르다.
  * v1과 달리 유지 신호(KA)를 토글하므로 v2 회로(555 펄스 끊김 감지)에 그대로 쓸 수 있다.
  *
  * 핀 배치 (스트래핑 핀 0/2(입력)/5/12/15 회피, 부팅 시 글리치 없는 핀만 출력에 사용)
@@ -13,6 +13,10 @@
  *  GPIO19  TRIG2    TLC555 트리거 CH2
  *  GPIO32  KA1      유지 신호 CH1 (우노 D9 자리. 100nF 결합 -> Q3)
  *  GPIO33  KA2      유지 신호 CH2 (우노 D10 자리. 100nF 결합 -> Q4)
+ *  GPIO23  LAD1A    CH1 강도 사다리 R1 바이패스 (우노 D11 자리)
+ *  GPIO4   LAD1B    CH1 강도 사다리 R2 바이패스 (우노 D12 자리)
+ *  GPIO13  LAD2A    CH2 강도 사다리 R1 바이패스 (우노 A0 자리)
+ *  GPIO14  LAD2B    CH2 강도 사다리 R2 바이패스 (우노 A1 자리. 부팅 때 잠깐 PWM이 나오지만 바이패스라 세기가 노브보다 커지지 않는다)
  *  GPIO25  BUZZ     부저
  *  GPIO2   LED      보드 내장 LED (ARMED 시 점등)
  *  GPIO21/22 I2C    MPU-6050 SDA/SCL
@@ -59,7 +63,8 @@ enum Sys : uint8_t { SYS_IDLE = 0, SYS_ARMED = 1, SYS_FAULT = 9 };
 enum Mode : uint8_t { M_OFF = 0, M_PULSE = 1, M_HOLD = 2, M_REST = 3 };
 
 struct Chan {
-  uint8_t gate, trig, ka;
+  uint8_t gate, trig, ka, ladA, ladB;
+  uint8_t level;
   uint8_t mode;
   uint32_t t0, lastRefresh, lastEnd, restUntil, lastKa, lastErr;
   uint16_t dur; uint8_t duty, env;
@@ -67,8 +72,8 @@ struct Chan {
   uint16_t holdSlot[HOLD_SLOTS]; uint32_t holdSlotIdx;       // 무게 누적 (10초 칸별 ms)
 };
 Chan ch[2] = {
-  {PIN_GATE1, 17, 32},
-  {PIN_GATE2, 19, 33},
+  {PIN_GATE1, 17, 32, 23, 4},
+  {PIN_GATE2, 19, 33, 13, 14},
 };
 
 volatile uint8_t sys = SYS_IDLE;
@@ -111,6 +116,13 @@ void allOff() {
 void IRAM_ATTR estopISR() {
   REG_WRITE(GPIO_OUT_W1TC_REG, (1UL << PIN_GATE1) | (1UL << PIN_GATE2));
   estopFlag = true;
+}
+
+// 강도 단계: R1(470Ω)은 ladA, R2(1kΩ)는 ladB가 바이패스한다
+void setLevel(Chan& c, uint8_t lv) {
+  c.level = lv;
+  digitalWrite(c.ladA, (lv == 3 || lv == 1) ? HIGH : LOW);   // 3, 1: R1 바이패스
+  digitalWrite(c.ladB, (lv == 3 || lv == 2) ? HIGH : LOW);   // 3, 2: R2 바이패스
 }
 
 void enterFault(uint8_t code) {
@@ -248,6 +260,13 @@ void handleLine(char* line) {
       if (sys == SYS_FAULT && digitalRead(PIN_ESTOP) == HIGH) { estopFlag = false; sys = SYS_IDLE; sendLine("K,R"); }
       else sendLine("E,8,ESTOP_STILL_PRESSED");
       break;
+    case 'L': {
+      int n = 0, lv = -1; sscanf(body, "L,%d,%d", &n, &lv);
+      if (n != 1 && n != 2) { sendLine("E,10,BAD_CH"); break; }
+      if (lv < 0 || lv > 3) { sendLine("E,15,BAD_LEVEL"); break; }
+      setLevel(ch[n - 1], lv);
+      sendf("K,L,%d,%d", n, lv);
+    } break;
     default: sendLine("E,9,UNKNOWN");
   }
 }
@@ -298,6 +317,7 @@ void setup() {
     pinMode(ch[i].gate, OUTPUT); digitalWrite(ch[i].gate, LOW);   // 가장 먼저 OFF
     pinMode(ch[i].ka, OUTPUT);   digitalWrite(ch[i].ka, LOW);
     pinMode(ch[i].trig, OUTPUT); digitalWrite(ch[i].trig, HIGH);
+    pinMode(ch[i].ladA, OUTPUT); pinMode(ch[i].ladB, OUTPUT); setLevel(ch[i], 3);   // 기존 동작(노브 세기)과 같게 시작
   }
   pinMode(PIN_ESTOP, INPUT_PULLUP); pinMode(PIN_ARM, INPUT_PULLUP);
   pinMode(PIN_BUZZ, OUTPUT); pinMode(PIN_LED, OUTPUT);
@@ -310,7 +330,7 @@ void setup() {
   esp_task_wdt_config_t cfg = { .timeout_ms = WDT_TIMEOUT_MS, .idle_core_mask = 0, .trigger_panic = true };
   if (esp_task_wdt_reconfigure(&cfg) != ESP_OK) esp_task_wdt_init(&cfg);
   esp_task_wdt_add(NULL);
-  sendLine("I,EMS_RECOIL,esp32-v2.1,PULSE<=250,HOLD<=5000");
+  sendLine("I,EMS_RECOIL,esp32-v2.2,PULSE<=250,HOLD<=5000,LADDER");
 }
 
 void loop() {

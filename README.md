@@ -40,8 +40,8 @@
 ├── docs/pad_placement.png                       전극 패드 붙이는 위치
 ├── docs/probe_a20_a21.png                       멀티미터로 PhotoMOS 확인하는 법
 ├── docs/output_wiring_simple.png                출력부(리드선 → PhotoMOS → 참가자 STOP → 패드) 실물 연결
-├── firmware/ems_recoil/ems_recoil.ino          Arduino Uno 펌웨어 v2 (반동 + 무게)
-├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 v2.1 (우노와 같은 로직, KA는 GPIO32/33, VR 단계용)
+├── firmware/ems_recoil/ems_recoil.ino          Arduino Uno 펌웨어 v2.2 (반동 + 무게 + 강도 사다리)
+├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 v2.2 (우노와 같은 로직, KA GPIO32/33, 사다리 GPIO23/4/13/14, VR 단계용)
 ├── processing/EMSRecoilSim/EMSRecoilSim.pde    시연 화면 (총 / 들기 / 벽 모드)
 └── tools/                                      시리얼 자동 검사, 배선도 생성 스크립트
 ```
@@ -100,6 +100,7 @@
 | 더미 로드 (옵션) | 1kΩ 2W + AQY210EH | 1 | 패드 이탈 감지 기기용 |
 | 절연 (옵션) | USB 아이솔레이터 (ADuM3160 보드) | 1 | 노트북을 어댑터에 꽂고 시연할 때 |
 | 기판 | 만능기판 | 1 | 고전압 측은 브레드보드 금지 |
+| 강도 사다리 (v2.2, 채널당) | AQY210EH ×2, 470Ω ×1, 1kΩ ×1, 330Ω ×2, 점퍼 | 1세트 | README 1.4b. 우노 D11·D12(CH1), A0·A1(CH2) |
 
 ### 1.4 회로도 (CH1, v1 — 현재 회로는 docs/wiring_ch1_uno.png와 docs/breadboard_830.png)
 
@@ -135,6 +136,29 @@
               PC817 pin2(K)─GND pin3(E) ──► 버튼 패드 (기기 GND 쪽)
 ```
 I_F ≈ 11.5mA, CTR ≥ 50% → I_C ≥ 5mA로 버튼 신호 전류를 충분히 흡수. 누름 시간 80~150ms를 펌웨어에서 준다.
+
+### 1.4b 강도 사다리 (v2.2)
+
+게이팅 PhotoMOS 뒤에 저항 두 개를 직렬로 넣고, 각각을 PhotoMOS로 건너뛰게(바이패스) 해서 세기를 4단계로 바꾼다. TENS 출력단은 여전히 손대지 않는다.
+
+```
+TENS 리드 A → a21 ─[게이팅 PhotoMOS]─ 20열 ─[R1 470Ω]─ 17열 ─(점퍼)─ 23열 ─[R2 1kΩ]─ 26열(a26) → 참가자 STOP → 패드 A
+                                        └─[LA 바이패스]─┘                 └─[LB 바이패스]─┘
+LA LED: D11 → 330Ω → LA 1번, LA 2번 → GND      LB LED: D12 → 330Ω → LB 1번, LB 2번 → GND   (CH2는 A0, A1)
+```
+
+| 단계 `$L,ch,n` | LA (R1 바이패스) | LB (R2 바이패스) | 직렬 저항 | 피부 1kΩ일 때 대략 | 피부 500Ω일 때 대략 |
+|---|---|---|---|---|---|
+| 3 (부팅 기본) | 켬 | 켬 | 0 | 100% | 100% |
+| 2 | 끔 | 켬 | 470Ω | 68% | 52% |
+| 1 | 켬 | 끔 | 1kΩ | 50% | 33% |
+| 0 | 끔 | 끔 | 1.47kΩ | 40% | 25% |
+
+- 비율은 TENS를 이상적인 전압원으로 본 어림값이다. TENS 7000은 정전류가 아니라 실제 비율은 피부 저항과 기기 내부 저항에 따라 달라지므로, 단계별 체감은 팔에서 다시 확인한다.
+- **사다리는 세기를 낮추기만 한다.** 노브 캘리브레이션(S·M·C)은 항상 단계 3에서 한다. 우노가 리셋되거나 선이 빠지면 바이패스가 열려 단계 0(가장 약함)이 된다. 핀이 HIGH로 고착되어도 단계 3, 즉 노브 세기를 넘지 않는다. 그래서 사다리 핀에는 555 감시를 두지 않았다.
+- 바이패스 PhotoMOS는 저항을 단락·개방할 뿐 경로를 끊지 않으므로, 자극 중에 단계를 바꿔도 출력이 끊기지 않는다.
+- 저항 손실: 30mA 피크 × 1kΩ = 30V, 0.9W 피크이지만 펄스 듀티가 약 2.4%(300µs 양극성 × 40Hz)라 평균 약 22mW. 1/4W 저항이면 충분하다. AQY210EH 출력 350V에도 여유가 있다.
+- 배치: 위쪽 a~e 17~27열(CH2 47~57열)이 TENS 쪽이다. 가장 가까운 저전압 부품(555, 13열)과 4열(약 10mm) 떨어져 있다. 꽂는 위치는 `docs/BREADBOARD_simple.md`, 그림은 `docs/output_wiring_simple.png`.
 
 ### 1.5 절연·노이즈 대책
 
@@ -182,7 +206,7 @@ I_F ≈ 11.5mA, CTR ≥ 50% → I_C ≥ 5mA로 버튼 신호 전류를 충분히
 - seq: 0~65535 순환. PC에서 건너뜀 감지로 패킷 유실률 측정.
 - roll/pitch: 도, 소수 1자리 (상보필터). gx~gz: deg/s 정수. ax~az: g × 100 정수. dist_mm: ToF(VL53L1X) 장착 시 거리, 미장착 -1.
 - state: 0 IDLE, 1 ARMED, 2 자극 중, 9 FAULT. (v1의 3 COOLDOWN은 v2에서 없어졌다. 간격 제한은 채널별로 펌웨어 안에서만 처리)
-- 오류 코드: 1 ESTOP, 2 ARM_SWITCH_OFF, 3 HEARTBEAT_LOST, 4 NOT_ARMED, 5 BUDGET, 6 BAD_CS, 7 IN_FAULT, 8 ESTOP_STILL_PRESSED, 9 UNKNOWN, 10 BAD_CH, 11 HOLD_REST / HOLD_LIMIT (무게 5초 도달 또는 휴식 중), 12 BUSY (그 채널이 이미 자극 중), 13 HOLD_BUDGET (무게 1분 누적 30초 초과), 14 TOO_SOON (반동 간격 300ms 미만).
+- 오류 코드: 1 ESTOP, 2 ARM_SWITCH_OFF, 3 HEARTBEAT_LOST, 4 NOT_ARMED, 5 BUDGET, 6 BAD_CS, 7 IN_FAULT, 8 ESTOP_STILL_PRESSED, 9 UNKNOWN, 10 BAD_CH, 11 HOLD_REST / HOLD_LIMIT (무게 5초 도달 또는 휴식 중), 12 BUSY (그 채널이 이미 자극 중), 13 HOLD_BUDGET (무게 1분 누적 30초 초과), 14 TOO_SOON (반동 간격 300ms 미만), 15 BAD_LEVEL (강도 단계가 0~3 밖).
 - `$W` 추가 규칙 (v2.1): 내려놓은 뒤 0.5초 안의 재요청은 조용히 무시되고, 다음 재전송에서 켜진다.
 
 예: `$S,1042,3.2,-27.5,12,-410,5,15,-8,97,-1,1*4C`
@@ -196,6 +220,7 @@ I_F ≈ 11.5mA, CTR ≥ 50% → I_C ≥ 5mA로 버튼 신호 전류를 충분히
 | 아밍 | `$A,1*HH` / `$A,0*HH` | 키스위치 ON + 소프트 아밍 둘 다 필요 |
 | 정지 | `$X*HH` | 즉시 게이트 OFF, IDLE |
 | 복구 | `$R*HH` | FAULT 해제 (E-STOP 풀린 뒤에만) |
+| 강도 (v2.2) | `$L,<ch>,<0~3>*HH` | 강도 사다리 단계. 3 = 노브 세기 그대로(부팅 기본), 0 = 가장 약함. 응답 `$K,L,ch,n` |
 
 예: `$T,1,120,100,0*57` (CH1, 120ms, 100%, 평탄)
 

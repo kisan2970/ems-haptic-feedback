@@ -20,6 +20,8 @@ uint32_t millis() { return g_ms; }
 uint32_t micros() { return g_ms * 1000; }
 void delayMicroseconds(unsigned) {}
 #define HEX 16
+#define A0 14
+#define A1 15
 #define HIGH 1
 #define LOW 0
 #define OUTPUT 1
@@ -132,6 +134,20 @@ int main() {
   // 6. Pulse duration accuracy
   jump(); run(10); stimMs[0] = 0; sendCmd("W,0"); run(600, 0); sendCmd("T,1,120,100,0"); run(500);
   expect(stimMs[0] >= 118 && stimMs[0] <= 122, "120ms 반동 길이", stimMs[0]);
+
+  // 7. 강도 사다리: 부팅 3, $L로 바이패스 핀 조합, 잘못된 값 거부
+  auto lad = [&](int c) { return pinv[ch[c].ladA] * 10 + pinv[ch[c].ladB]; };
+  expect(ch[0].level == 3 && lad(0) == 11 && lad(1) == 11, "부팅 시 강도 3 (두 채널 모두 바이패스)", lad(0));
+  const int want[4] = { 0, 10, 1, 11 };   // 단계 0~3: (R1 바이패스, R2 바이패스)
+  int ladOk = 1;
+  for (int lv = 0; lv <= 3; lv++) {
+    for (int c = 1; c <= 2; c++) { char b[16]; sprintf(b, "L,%d,%d", c, lv); sendCmd(b); }
+    run(5);
+    if (lad(0) != want[lv] || lad(1) != want[lv]) ladOk = 0;
+  }
+  expect(ladOk, "단계 0~3 핀 조합 (0=둘 다 저항, 1=R2만, 2=R1만, 3=둘 다 바이패스)", ladOk);
+  out.clear(); sendCmd("L,1,4"); sendCmd("L,3,1"); run(5);
+  expect(countOut("E,15") == 1 && countOut("E,10") == 1 && lad(0) == 11, "범위 밖 단계·채널 거부, 값 유지", lad(0));
 
   printf("fails=%d\n", fails);
   return fails;

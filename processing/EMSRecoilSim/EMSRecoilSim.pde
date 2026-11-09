@@ -6,7 +6,7 @@
 //   [4] 공 비교  : 똑같이 생긴 공 2개 중 하나만 무겁다 (블라인드 테스트)
 //                  공 클릭 = 들기/내려놓기, H = 무거운 공 다시 섞기, J/K = 참가자 답(공1/공2가 무겁다), V = 정답 보기
 //                  L = 화면 지연 켜기/끄기. 끄면 두 공이 똑같이 따라와 EMS만으로 맞히는지 본다 (CSV visual_lag 열)
-// 공통: A 아밍, SPACE 전부 정지, R FAULT 해제, T 테스트 반동 100ms
+// 공통: A 아밍, SPACE 전부 정지, R FAULT 해제, T 테스트 반동 100ms, - / = 강도 단계 내리기/올리기 (펌웨어 v2.2)
 import processing.serial.*;
 
 Serial port;
@@ -36,6 +36,7 @@ boolean ballVisualLag = true;   // 참가자가 화면을 보면 지연만 보�
 int trials = 0, correct = 0;
 float ballLiftY = 0;
 int weight = 1;
+int level = 3;               // 강도 사다리 단계 0~3. 펌웨어는 부팅 시 3(노브 세기 그대로)
 boolean holding = false;
 int lastHold = 0, lastHb = 0, lastTrig = 0;
 
@@ -207,7 +208,8 @@ void drawHud() {
   textSize(14); fill(200);
   String st = devState == 9 ? "FAULT" : devState == 2 ? "자극 중" : devState == 1 ? "ARMED" : "IDLE";
   text("장치: " + st + "    pitch " + nf(pitch, 1, 1) + "    마지막 응답: " + lastMsg, 40, 76);
-  text("A 아밍  SPACE 정지  R 해제  T 테스트  1/2/3/4 모드", 40, height - 25);
+  text("A 아밍  SPACE 정지  R 해제  T 테스트  1/2/3/4 모드  -/= 강도 단계", 40, height - 25);
+  textSize(18); fill(255, 200, 120); text("강도 " + level + " / 3", width - 170, 48);
   if (devState == 2) { fill(255, 80, 80); ellipse(width - 40, 40, 24, 24); }
 }
 
@@ -235,6 +237,10 @@ void keyPressed() {
   if (key == 'a' || key == 'A') send("A,1");
   else if (key == ' ') { holding = false; ballHeld = -1; send("X"); }
   else if (key == 'r' || key == 'R') send("R");
+  else if (key == '-' || key == '=') {
+    level = constrain(level + (key == '=' ? 1 : -1), 0, 3);
+    send("L,1," + level); send("L,2," + level);
+  }
   else if (key == 't' || key == 'T') send("T,1,100,100,0");
   else if (key == 'f' || key == 'F') { if (mode == 1) fireGun(); }
   else if (key == 'p' || key == 'P') { if (mode == 2) toggleHold(); }

@@ -1,5 +1,5 @@
 /*
- * ems_recoil.ino  v2.1  -  EMS 근자극 기반 반동 + 무게감 피드백 펌웨어 (Arduino Uno)
+ * ems_recoil.ino  v2.2  -  EMS 근자극 기반 반동 + 무게감 피드백 펌웨어 (Arduino Uno)
  * Serial 115200
  *
  * 두 가지 자극
@@ -16,7 +16,11 @@
  *  D8   BUZZ     부저
  *  D9   KA1      유지 신호 CH1 (자극 중 5ms마다 토글 -> 100nF 결합 -> Q3가 555 타이밍 C 방전)
  *  D10  KA2      유지 신호 CH2
+ *  D11  LAD1A    CH1 강도 사다리: R1(470Ω) 바이패스 PhotoMOS (HIGH=바이패스)
+ *  D12  LAD1B    CH1 강도 사다리: R2(1kΩ) 바이패스 PhotoMOS
  *  D13  LED      ARMED 표시
+ *  A0   LAD2A    CH2 강도 사다리: R1 바이패스
+ *  A1   LAD2B    CH2 강도 사다리: R2 바이패스
  *  A4/A5 I2C     MPU-6050
  *
  * 하드웨어 안전: 555는 "펄스 끊김 감지" 모드 (470k x 100nF = 약 0.05s).
@@ -26,6 +30,7 @@
  *  PC -> MCU : $H  하트비트 / $A,1  $A,0  아밍 / $X  전부 정지 / $R  FAULT 해제
  *              $T,<ch>,<dur_ms>,<duty%>,<env>   반동 1회 (ch 1|2)
  *              $W,<mask>                         무게 유지 (mask 0=해제, 1=CH1, 2=CH2, 3=둘 다). 200ms 안에 재전송해야 유지
+ *              $L,<ch>,<level>                   강도 단계 0~3 (3=노브 그대로, 0=가장 약함). 부팅 시 3
  *  MCU -> PC : $S,seq,roll,pitch,gx,gy,gz,ax,ay,az,dist,state   100Hz  (state 0 IDLE,1 ARMED,2 자극중,9 FAULT)
  *              $K,...  ACK  /  $E,<code>,<msg>  오류  /  $I,...  부팅
  *
@@ -35,6 +40,11 @@
  *  - $X·하트비트·ARM·비상정지로 끊긴 무게가 누적에 안 들어가던 문제: allOff()가 holdStop()을 거친다.
  *  - 내려놓은 뒤 0.5초 안에는 다시 들기 불가.
  *  - I2C 타임아웃 3ms, 읽기 실패 시 그 샘플만 건너뜀.
+ *
+ * v2.2 (11/9) 강도 사다리
+ *  출력 경로에 R1 470Ω, R2 1kΩ을 직렬로 넣고 각각을 PhotoMOS로 건너뛴다.
+ *    단계 3 = 둘 다 바이패스(노브 세기 그대로) / 2 = R1만 / 1 = R2만 / 0 = 둘 다 들어감(가장 약함)
+ *  리셋·전원 없음이면 바이패스가 열려 단계 0이 된다. 사다리는 노브로 정한 세기보다 세게 만들 수 없다.
  */
 #include <Wire.h>
 #include <avr/wdt.h>
@@ -66,7 +76,8 @@ enum Sys : uint8_t { SYS_IDLE = 0, SYS_ARMED = 1, SYS_FAULT = 9 };
 enum Mode : uint8_t { M_OFF = 0, M_PULSE = 1, M_HOLD = 2, M_REST = 3 };
 
 struct Chan {
-  uint8_t gate, trig, ka;
+  uint8_t gate, trig, ka, ladA, ladB;
+  uint8_t level;
   uint8_t mode;
   uint32_t t0, lastRefresh, lastEnd, restUntil, lastKa, lastErr;
   uint16_t dur; uint8_t duty, env;
@@ -74,8 +85,8 @@ struct Chan {
   uint16_t holdSlot[HOLD_SLOTS]; uint32_t holdSlotIdx;       // 무게 누적 (10초 칸별 ms)
 };
 Chan ch[2] = {
-  {5, 4, 9},
-  {6, 7, 10},
+  {5, 4, 9, 11, 12},
+  {6, 7, 10, A0, A1},
 };
 
 volatile uint8_t sys = SYS_IDLE;
@@ -115,6 +126,13 @@ void allOff() {
   }
 }
 void estopISR() { digitalWrite(5, LOW); digitalWrite(6, LOW); estopFlag = true; }
+
+// 강도 단계: R1(470Ω)은 ladA, R2(1kΩ)는 ladB가 바이패스한다
+void setLevel(Chan& c, uint8_t lv) {
+  c.level = lv;
+  digitalWrite(c.ladA, (lv == 3 || lv == 1) ? HIGH : LOW);   // 3, 1: R1 바이패스
+  digitalWrite(c.ladB, (lv == 3 || lv == 2) ? HIGH : LOW);   // 3, 2: R2 바이패스
+}
 
 void enterFault(uint8_t code) {
   allOff(); sys = SYS_FAULT;
@@ -251,6 +269,13 @@ void handleLine(char* line) {
       if (sys == SYS_FAULT && digitalRead(PIN_ESTOP) == HIGH) { estopFlag = false; sys = SYS_IDLE; sendLine("K,R"); }
       else sendLine("E,8,ESTOP_STILL_PRESSED");
       break;
+    case 'L': {
+      int n = 0, lv = -1; sscanf(body, "L,%d,%d", &n, &lv);
+      if (n != 1 && n != 2) { sendLine("E,10,BAD_CH"); break; }
+      if (lv < 0 || lv > 3) { sendLine("E,15,BAD_LEVEL"); break; }
+      setLevel(ch[n - 1], lv);
+      sendf("K,L,%d,%d", n, lv);
+    } break;
     default: sendLine("E,9,UNKNOWN");
   }
 }
@@ -301,6 +326,7 @@ void setup() {
     pinMode(ch[i].gate, OUTPUT); digitalWrite(ch[i].gate, LOW);   // 가장 먼저 OFF
     pinMode(ch[i].ka, OUTPUT);   digitalWrite(ch[i].ka, LOW);
     pinMode(ch[i].trig, OUTPUT); digitalWrite(ch[i].trig, HIGH);
+    pinMode(ch[i].ladA, OUTPUT); pinMode(ch[i].ladB, OUTPUT); setLevel(ch[i], 3);   // 기존 동작(노브 세기)과 같게 시작
   }
   pinMode(PIN_ESTOP, INPUT_PULLUP); pinMode(PIN_ARM, INPUT_PULLUP);
   pinMode(PIN_BUZZ, OUTPUT); pinMode(PIN_LED, OUTPUT);
@@ -310,7 +336,7 @@ void setup() {
   Wire.setWireTimeout(3000, true);   // 3ms. 없으면 I2C가 잠길 때 루프가 멈춰 워치독 리셋이 반복된다 (AVR 코어 1.8.3 이상)
   mpuInit();
   wdt_enable(WDTO_250MS);
-  sendLine("I,EMS_RECOIL,v2.1,PULSE<=250,HOLD<=5000");
+  sendLine("I,EMS_RECOIL,v2.2,PULSE<=250,HOLD<=5000,LADDER");
 }
 
 void loop() {
