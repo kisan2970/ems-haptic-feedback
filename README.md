@@ -40,6 +40,7 @@
 ├── docs/pad_placement.png                       전극 패드 붙이는 위치
 ├── docs/probe_a20_a21.png                       멀티미터로 PhotoMOS 확인하는 법
 ├── docs/output_wiring_simple.png                출력부(리드선 → PhotoMOS → 참가자 STOP → 패드) 실물 연결
+├── docs/perfboard_7x9.png / PERFBOARD.md        만능기판 출력부 배치도(구상안) + 구멍 목록
 ├── firmware/ems_recoil/ems_recoil.ino          Arduino Uno 펌웨어 v2.2 (반동 + 무게 + 강도 사다리)
 ├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 v2.2 (우노와 같은 로직, KA GPIO32/33, 사다리 GPIO23/4/13/14, VR 단계용)
 ├── processing/EMSRecoilSim/EMSRecoilSim.pde    시연 화면 (총 / 들기 / 벽 모드)
