@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1260" viewBox="0 0 1900 1260">
+<defs><filter id="sh" x="-5%" y="-5%" width="110%" height="120%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.25"/></filter></defs>
+<rect width="1900" height="1260" fill="#e9e6df"/>
+<text x="40" y="48" font-size="26" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">착용 배치 구상도 — 팔에는 패드 · IMU · 선만, 회로는 책상 박스에 (구상안)</text>
+<text x="40" y="76" font-size="14" text-anchor="start" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >팔이 자유롭게 움직이도록 무게는 책상에 두고, 선은 한 다발로 어깨 → 등 → 허리로 내린다. 실물 확인 전.</text>
+<circle cx="205" cy="190" r="58" fill="#f1c9a5" stroke="#c99a74" stroke-width="3"/>
+<rect x="90" y="262" width="250" height="470" rx="46" fill="#cfd6dc" stroke="#9aa5ad" stroke-width="3"/>
+<text x="215" y="520" font-size="15" text-anchor="middle" fill="#6b7780" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">몸통</text>
+<rect x="318" y="268" width="450" height="96" rx="44" fill="#f1c9a5" stroke="#c99a74" stroke-width="3"/>
+<rect x="740" y="276" width="420" height="80" rx="38" fill="#f1c9a5" stroke="#c99a74" stroke-width="3"/>
+<ellipse cx="1215" cy="316" rx="72" ry="46" fill="#f1c9a5" stroke="#c99a74" stroke-width="3"/>
+<text x="540" y="258" font-size="13" text-anchor="middle" fill="#8a5a3a" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">위팔</text>
+<text x="950" y="266" font-size="13" text-anchor="middle" fill="#8a5a3a" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">전완</text>
+<text x="1236" y="322" font-size="12" text-anchor="middle" fill="#8a5a3a" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">손등</text>
+<rect x="52" y="300" width="70" height="330" rx="34" fill="#f1c9a5" stroke="#c99a74" stroke-width="3"/>
+<ellipse cx="88" cy="660" rx="40" ry="34" fill="#f1c9a5" stroke="#c99a74" stroke-width="3"/>
+<rect x="60" y="640" width="56" height="40" rx="8" fill="#2b2b2b"/><circle cx="88" cy="660" r="13" fill="#27ae60" stroke="#145a32" stroke-width="2"/>
+<rect x="470" y="300" width="96" height="50" rx="8" fill="#9fd3f2" stroke="#2c7fb8" stroke-width="2.5"/>
+<text x="518.0" y="330.0" font-size="12" text-anchor="middle" fill="#1d5a85" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">CH2 A</text>
+<rect x="610" y="300" width="96" height="50" rx="8" fill="#9fd3f2" stroke="#2c7fb8" stroke-width="2.5"/>
+<text x="658.0" y="330.0" font-size="12" text-anchor="middle" fill="#1d5a85" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">CH2 B</text>
+<rect x="812" y="284" width="86" height="44" rx="8" fill="#9fd3f2" stroke="#2c7fb8" stroke-width="2.5"/>
+<text x="855.0" y="311.0" font-size="12" text-anchor="middle" fill="#1d5a85" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">CH1 A</text>
+<rect x="940" y="284" width="86" height="44" rx="8" fill="#9fd3f2" stroke="#2c7fb8" stroke-width="2.5"/>
+<text x="983.0" y="311.0" font-size="12" text-anchor="middle" fill="#1d5a85" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">CH1 B</text>
+<rect x="792" y="272" width="258" height="88" rx="30" fill="#34495e22" stroke="#34495e" stroke-width="2" stroke-dasharray="8,5"/>
+<rect x="786.38" y="375" width="269.24" height="24" rx="6" fill="#fffdf5" stroke="#34495e" stroke-width="1.3" opacity="0.97"/>
+<text x="921" y="392" font-size="13" text-anchor="middle" fill="#34495e" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">토시(압박 슬리브)로 패드와 선을 덮는다</text>
+<rect x="493.75" y="375.5" width="188.5" height="23.5" rx="6" fill="#fffdf5" stroke="#1d5a85" stroke-width="1.3" opacity="0.97"/>
+<text x="588" y="392" font-size="12.5" text-anchor="middle" fill="#1d5a85" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">CH2 패드: 위팔 뒤 (삼두근)</text>
+<rect x="372" y="260" width="26" height="112" rx="8" fill="#34495e"/>
+<rect x="308.88" y="215" width="152.24" height="24" rx="6" fill="#fffdf5" stroke="#34495e" stroke-width="1.3" opacity="0.97"/>
+<text x="385" y="232" font-size="13" text-anchor="middle" fill="#34495e" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">① 위팔 밴드: 선 고정</text>
+<rect x="1100" y="270" width="26" height="92" rx="8" fill="#34495e"/>
+<rect x="1036.88" y="223" width="152.24" height="24" rx="6" fill="#fffdf5" stroke="#34495e" stroke-width="1.3" opacity="0.97"/>
+<text x="1113" y="240" font-size="13" text-anchor="middle" fill="#34495e" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">② 손목 밴드: 선 고정</text>
+<rect x="1176" y="292" width="62" height="42" rx="6" fill="#5b2d8a" stroke="#3a1a5e" stroke-width="2"/>
+<text x="1207" y="318" font-size="12" text-anchor="middle" fill="#fff" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">IMU</text>
+<rect x="1096.84" y="383" width="206.32" height="24" rx="6" fill="#fffdf5" stroke="#7d3cc8" stroke-width="1.3" opacity="0.97"/>
+<text x="1200" y="400" font-size="13" text-anchor="middle" fill="#7d3cc8" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">IMU: 열수축 튜브로 감싸 절연</text>
+<path d="M1176,300 C1150,282 1130,274 1113,274 L790,274 C770,274 770,244 752,244 C734,244 734,270 716,270 L400,270 C350,270 344,262 340,300 L340,700" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M1176,300 C1150,282 1130,274 1113,274 L790,274 C770,274 770,244 752,244 C734,244 734,270 716,270 L400,270 C350,270 344,262 340,300 L340,700" fill="none" stroke="#7d3cc8" stroke-width="5" stroke-linecap="round" />
+<rect x="678.5" y="205.5" width="147.0" height="23.5" rx="6" fill="#fffdf5" stroke="#7d3cc8" stroke-width="1.3" opacity="0.97"/>
+<text x="752" y="222" font-size="12.5" text-anchor="middle" fill="#7d3cc8" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">팔꿈치 여유 고리 5cm</text>
+<path d="M855,328 L855,352 L983,352" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M855,328 L855,352 L983,352" fill="none" stroke="#ee7a1d" stroke-width="5" stroke-linecap="round" />
+<path d="M983,328 L983,352" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M983,328 L983,352" fill="none" stroke="#ee7a1d" stroke-width="5" stroke-linecap="round" />
+<path d="M855,352 C800,356 780,366 740,366 L420,366 C370,366 358,372 356,410 L356,700" fill="none" stroke="#00000040" stroke-width="9" stroke-linecap="round"/>
+<path d="M855,352 C800,356 780,366 740,366 L420,366 C370,366 358,372 356,410 L356,700" fill="none" stroke="#ee7a1d" stroke-width="6" stroke-linecap="round" />
+<path d="M518,350 L518,372 M658,350 L658,372 M658,372 L518,372 C440,376 372,380 372,420 L372,700" fill="none" stroke="#00000040" stroke-width="9" stroke-linecap="round"/>
+<path d="M518,350 L518,372 M658,350 L658,372 M658,372 L518,372 C440,376 372,380 372,420 L372,700" fill="none" stroke="#b5530f" stroke-width="6" stroke-linecap="round" />
+<rect x="374.64" y="423" width="450.71999999999997" height="24" rx="6" fill="#fffdf5" stroke="#a84a08" stroke-width="1.3" opacity="0.97"/>
+<text x="600" y="440" font-size="13" text-anchor="middle" fill="#a84a08" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">전극선(주황)은 팔 아래쪽, IMU 선(보라)은 위쪽 — 서로 묶지 않는다</text>
+<text x="300" y="560" font-size="12.5" text-anchor="end" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">어깨 → 등 뒤</text>
+<rect x="322" y="690" width="68" height="26" rx="8" fill="#34495e"/>
+<rect x="400" y="692" width="90.62" height="24" rx="6" fill="#fffdf5" stroke="#34495e" stroke-width="1.3" opacity="0.97"/>
+<text x="408" y="709" font-size="13" text-anchor="start" fill="#34495e" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">③ 허리 클립</text>
+<rect x="470" y="800" width="1010" height="330" rx="18" fill="#f7f5ef" stroke="#8a8473" stroke-width="2.5" stroke-dasharray="10,6"/>
+<text x="490" y="830" font-size="16" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">책상 박스 — 몸에 달지 않는다</text>
+<rect x="494" y="860" width="190" height="150" rx="12" fill="#fff" stroke="#888" stroke-width="2" filter="url(#sh)"/>
+<text x="589.0" y="890" font-size="15" text-anchor="middle" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">TENS 7000</text>
+<text x="589.0" y="914" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >9V 건전지</text>
+<text x="589.0" y="934" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >노브 스토퍼</text>
+<rect x="720" y="860" width="250" height="150" rx="12" fill="#f3dcb8" stroke="#8a6d3b" stroke-width="2" filter="url(#sh)"/>
+<text x="845.0" y="890" font-size="15" text-anchor="middle" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">만능기판 (출력부)</text>
+<text x="845.0" y="914" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >게이팅 · 강도 사다리</text>
+<text x="845.0" y="934" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >단자대 IN / OUT / 중계</text>
+<rect x="1006" y="860" width="230" height="150" rx="12" fill="#fff" stroke="#888" stroke-width="2" filter="url(#sh)"/>
+<text x="1121.0" y="890" font-size="15" text-anchor="middle" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">브레드보드</text>
+<text x="1121.0" y="914" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >555 감시 · 트랜지스터</text>
+<text x="1121.0" y="934" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >(저전압만)</text>
+<rect x="1272" y="860" width="180" height="150" rx="12" fill="#d7e9f5" stroke="#1e74a8" stroke-width="2" filter="url(#sh)"/>
+<text x="1362.0" y="890" font-size="15" text-anchor="middle" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">우노</text>
+<text x="1362.0" y="914" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >COM17</text>
+<text x="1362.0" y="934" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >USB → 노트북</text>
+<path d="M684,920 L720,920" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M684,920 L720,920" fill="none" stroke="#ee7a1d" stroke-width="5" stroke-linecap="round" />
+<text x="702" y="908" font-size="10.5" text-anchor="middle" fill="#a84a08" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">리드 A</text>
+<path d="M970,935 L1006,935" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M970,935 L1006,935" fill="none" stroke="#8e44ad" stroke-width="5" stroke-linecap="round" />
+<text x="988" y="923" font-size="10.5" text-anchor="middle" fill="#6c3483" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">H1</text>
+<path d="M1272,910 L1236,910" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M1272,910 L1236,910" fill="none" stroke="#2f6fd6" stroke-width="5" stroke-linecap="round" />
+<path d="M1362,1010 L1362,1050 L845,1050 L845,1010" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M1362,1010 L1362,1050 L845,1050 L845,1010" fill="none" stroke="#17a2b8" stroke-width="5" stroke-linecap="round" />
+<text x="1110" y="1042" font-size="11" text-anchor="middle" fill="#0b5563" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">H2: 우노 → 만능기판 (강도 사다리)</text>
+<path d="M1362,1050 L1362,1090 L530,1090" fill="none" stroke="#00000040" stroke-width="7" stroke-linecap="round"/>
+<path d="M1362,1050 L1362,1090 L530,1090" fill="none" stroke="#7d3cc8" stroke-width="4" stroke-linecap="round" />
+<text x="950" y="1108" font-size="11" text-anchor="middle" fill="#7d3cc8" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">IMU 선 4가닥 → 우노 3.3V · GND · A4 · A5</text>
+<rect x="1560" y="860" width="290" height="150" rx="12" fill="#fff" stroke="#888" stroke-width="2" filter="url(#sh)"/>
+<text x="1705.0" y="890" font-size="15" text-anchor="middle" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">노트북 (Processing)</text>
+<text x="1705.0" y="914" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >배터리로 구동</text>
+<text x="1705.0" y="934" font-size="12" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >어댑터를 꽂으면 USB 아이솔레이터</text>
+<path d="M1452,935 L1560,935" fill="none" stroke="#00000040" stroke-width="9" stroke-linecap="round"/>
+<path d="M1452,935 L1560,935" fill="none" stroke="#555" stroke-width="6" stroke-linecap="round" />
+<text x="1520" y="922" font-size="11" text-anchor="middle" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">USB</text>
+<path d="M340,716 C340,790 400,1090 530,1090" fill="none" stroke="#00000040" stroke-width="7" stroke-linecap="round"/>
+<path d="M340,716 C340,790 400,1090 530,1090" fill="none" stroke="#7d3cc8" stroke-width="4" stroke-linecap="round" />
+<path d="M356,716 C356,800 420,980 720,980" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M356,716 C356,800 420,980 720,980" fill="none" stroke="#ee7a1d" stroke-width="5" stroke-linecap="round" />
+<path d="M372,716 C372,780 430,996 720,996" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M372,716 C372,780 430,996 720,996" fill="none" stroke="#b5530f" stroke-width="5" stroke-linecap="round" />
+<path d="M88,694 C88,900 300,960 720,960" fill="none" stroke="#00000040" stroke-width="8" stroke-linecap="round"/>
+<path d="M88,694 C88,900 300,960 720,960" fill="none" stroke="#1d8348" stroke-width="5" stroke-linecap="round" />
+<rect x="184.8" y="863" width="130.39999999999998" height="24" rx="6" fill="#fffdf5" stroke="#555" stroke-width="1.3" opacity="0.97"/>
+<text x="250" y="880" font-size="13" text-anchor="middle" fill="#555" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">선 다발 1.2~1.5m</text>
+<rect x="36.34" y="713" width="167.32" height="24" rx="6" fill="#fffdf5" stroke="#1d8348" stroke-width="1.3" opacity="0.97"/>
+<text x="120" y="730" font-size="13" text-anchor="middle" fill="#1d8348" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">참가자 STOP: 반대쪽 손</text>
+<text x="732" y="964" font-size="10" text-anchor="start" fill="#fff" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">STOP</text>
+<rect x="1330" y="110" width="530" height="640" rx="12" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>
+<text x="1352" y="146" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">몸에 다는 것 (합쳐서 수십 g)</text>
+<text x="1352" y="173" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 패드 4장 + 토시, IMU 1개, 밴드 2개, 선</text>
+<text x="1352" y="200" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 참가자 STOP은 반대쪽 손에 쥔다</text>
+<text x="1352" y="239" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">선 다발 (팔 ↔ 박스)</text>
+<text x="1352" y="266" font-size="13" text-anchor="start" fill="#a84a08" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">· 전극선 4가닥: CH1 A·B, CH2 A·B. 채널별로 꼰다</text>
+<text x="1352" y="293" font-size="13" text-anchor="start" fill="#7d3cc8" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">· IMU 4가닥: SDA+GND, SCL+3.3V로 둘씩 꼰다</text>
+<text x="1352" y="320" font-size="13" text-anchor="start" fill="#1d8348" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">· STOP 4가닥 (NC 접점 2개): 따로 박스로</text>
+<text x="1352" y="347" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 전극선과 IMU 선은 팔의 반대편으로, 묶지 않는다</text>
+<text x="1352" y="386" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">움직이기 편하게</text>
+<text x="1352" y="413" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 선은 밴드 2곳에 고정 → 당겨도 패드·IMU가 안 뜬다</text>
+<text x="1352" y="440" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 팔꿈치에 여유 고리 → 굽혔다 펴도 안 당긴다</text>
+<text x="1352" y="467" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 선은 손 쪽이 아니라 어깨 쪽으로 빠진다</text>
+<text x="1352" y="494" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 패드는 토시가 눌러 준다 (접촉이 흔들리면 따끔)</text>
+<text x="1352" y="533" font-size="15" text-anchor="start" fill="#b02a1f" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">꼭 지킬 것</text>
+<text x="1352" y="560" font-size="13" text-anchor="start" fill="#b02a1f" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">· IMU 맨 기판이 피부에 닿으면 PC와 몸이 이어진다</text>
+<text x="1352" y="587" font-size="13" text-anchor="start" fill="#b02a1f" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >  → 열수축 튜브나 케이스로 감싼다</text>
+<text x="1352" y="614" font-size="13" text-anchor="start" fill="#b02a1f" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· 전극은 팔에만, 선이 몸통 앞을 가로지르지 않게</text>
+<text x="1352" y="641" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >· STOP 복귀선과 패드선은 만능기판 OUT 단자대의</text>
+<text x="1352" y="668" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >  예비 핀 한 구멍에 같이 물린다 (중계점)</text>
+<rect x="40" y="1160" width="1820" height="84" rx="12" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>
+<text x="60" y="1190" font-size="15" text-anchor="start" fill="#222" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">확인이 필요한 것</text>
+<text x="210" y="1190" font-size="13" text-anchor="start" fill="#333" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" >① IMU 선이 1m를 넘으면 I2C 400kHz가 불안할 수 있다 → 100kHz로 낮추고(펌웨어 한 줄) 읽기 오류를 본다.   ② 전극선 연장부는 납땜 후 열수축, 당겨서 확인.</text>
+<text x="60" y="1222" font-size="13" text-anchor="start" fill="#1d6b35" font-family="Malgun Gothic, Apple SD Gothic Neo, WenQuanYi Zen Hei, sans-serif" font-weight="700">다음 단계(과목 이후): 우노 + 브레드보드를 ESP32 + 기판 한 장으로 줄이고 무선(BLE)으로 바꾸면 박스를 허리 팩으로 옮길 수 있다. 지금 구조에서 선 다발만 짧아진다.</text>
+</svg>
