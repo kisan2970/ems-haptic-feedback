@@ -3,13 +3,14 @@
 """
 import io, os, math, sys
 
-SIMPLE = "--simple" in sys.argv   # 키스위치·부저·실험자 E-STOP 생략판
-SUF = "_simple" if SIMPLE else ""
+PERF = "--perf" in sys.argv       # 출력부(게이팅·사다리 PhotoMOS)를 만능기판으로 옮긴 뒤의 브레드보드 (간소화판 기준)
+SIMPLE = "--simple" in sys.argv or PERF   # 키스위치·부저·실험자 E-STOP 생략판
+SUF = "_perf" if PERF else "_simple" if SIMPLE else ""
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(HERE, '..', 'docs')
 
-W, H = 2000, 1260
+W, H = 2000, (1590 if PERF else 1260)
 P = 22
 X0 = 520
 ROW = {'a': 400, 'b': 422, 'c': 444, 'd': 466, 'e': 488, 'f': 532, 'g': 554, 'h': 576, 'i': 598, 'j': 620}
@@ -146,8 +147,8 @@ a(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 
 a('<defs><linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e74a8"/><stop offset="1" stop-color="#155a85"/></linearGradient>'
   '<filter id="sh" x="-5%" y="-5%" width="110%" height="115%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.25"/></filter></defs>')
 a(f'<rect width="{W}" height="{H}" fill="#e9e6df"/>')
-text(40, 44, '브레드보드 실물 배치도 (830홀) — 아두이노 우노 · 2채널 v2.2 (강도 사다리)' + (' · 간소화판' if SIMPLE else ''), 26, 'start', bold=True)
-if SIMPLE: text(40, 96, '키스위치 · 부저 · 실험자 E-STOP 생략', 14, 'start', c='#c0392b', bold=True)
+text(40, 44, '브레드보드 실물 배치도 (830홀) — 아두이노 우노 · 2채널 v2.2 (강도 사다리)' + (' · 만능기판 연결판' if PERF else ' · 간소화판' if SIMPLE else ''), 26, 'start', bold=True)
+if SIMPLE: text(40, 96, '키스위치 · 부저 · 실험자 E-STOP 생략' + (' · PhotoMOS와 강도 사다리는 만능기판으로 옮김 (브레드보드에는 저전압 회로만)' if PERF else ''), 14, 'start', c='#c0392b', bold=True)
 text(40, 70, '총 반동 + 물체 무게 · 위에서 내려다본 모습 · 구멍 위치는 docs/BREADBOARD' + SUF + '.md 목록과 같음', 14, 'start', c='#555')
 
 bx0, bx1 = X0 - 42, cx(63) + 42
@@ -169,7 +170,7 @@ for r, y in ROW.items():
 text(cx(3.6), 514, 'CH1 · 손목 신전근', 10, c='#6b6455', bold=True)
 text(cx(31), 514, 'CH1 ◀  ▶ CH2', 10, c='#6b6455', bold=True)
 text(cx(60.6), 514, 'CH2 · 삼두근', 10, c='#6b6455', bold=True)
-for c0 in (17, 47):   # 위쪽 a~e 17~27열 (CH2는 47~57열): 게이팅 PhotoMOS + 강도 사다리, TENS 전용
+for c0 in (() if PERF else (17, 47)):   # 위쪽 a~e 17~27열 (CH2는 47~57열): 게이팅 PhotoMOS + 강도 사다리, TENS 전용
     a(f'<rect x="{cx(c0)-11}" y="390" width="{11*P}" height="106" rx="4" fill="#ff8a3d22" stroke="#e8731a" stroke-width="1.5" stroke-dasharray="4,3"/>')
     text(cx(c0 + 5), 383, 'TENS 전용 (게이팅 + 강도 사다리)', 9.5, c='#c4560f', bold=True)
 
@@ -201,14 +202,20 @@ def channel(o, ch, ka_hole):
     resistor(f'i{11+o}', f'B+{11+o}', '10kΩ', ch, lab_off=(-23, 18))
     jumper(f'j{13+o}', f'B+{14+o}', RED, ch, '555 4번 → 5V')
     resistor(f'g{12+o}', f'g{16+o}', '330Ω', ch, lab_off=(0, -11))
-    jumper(f'h{16+o}', f'h{20+o}', '#8e44ad', ch, '330Ω → PhotoMOS 1번')
-    dip(20 + o, 2, 'AQY', ch, '4  3')
+    jumper(f'h{16+o}', f'h{20+o}', '#8e44ad', ch, '330Ω → PhotoMOS 1번' if not PERF else f'330Ω → {20+o}열 (만능기판 G+로 나가는 줄)')
+    if not PERF: dip(20 + o, 2, 'AQY', ch, '4  3')
     to92([23 + o, 24 + o, 25 + o], 'f', f'Q{1 if o == 0 else 2} 2N3904', ch, ['C', 'B', 'E'])
-    jumper(f'h{23+o}', f'h{21+o}', '#8e44ad', ch, f'{qg} 컬렉터 → PhotoMOS 2번')
+    jumper(f'h{23+o}', f'h{21+o}', '#8e44ad', ch, f'{qg} 컬렉터 → PhotoMOS 2번' if not PERF else f'{qg} 컬렉터 → {21+o}열 (만능기판 G−로 나가는 줄)')
     jumper(f'j{25+o}', f'B-{24+o}', BLK, ch, f'{qg} 이미터 → GND')
     resistor(f'i{24+o}', f'i{28+o}', '1kΩ', ch, lab_off=(0, 14))
     use(f'g{28+o}'); steps.append((ch, '게이트 선 도착점', f'g{28+o}'))
     resistor(f'j{28+o}', f'B-{28+o}', '10kΩ', ch, lab_off=(24, 2))
+    if PERF:   # PhotoMOS 3개와 사다리 부품은 만능기판에 있다. 브레드보드에서는 20·21열에서 선 두 가닥만 나간다
+        n = 1 if o == 0 else 2
+        use(f'j{20+o}'); steps.append((ch, f'만능기판 H1 G{n}+ 로 가는 선', f'j{20+o}'))
+        use(f'j{21+o}'); steps.append((ch, f'만능기판 H1 G{n}− 로 가는 선', f'j{21+o}'))
+        steps.append((ch, '비우는 곳', f'위쪽 a~e {17+o}~{27+o}열 전부, 아래쪽 f{20+o}·f{21+o} (AQY 칩 자리). TENS 선은 브레드보드에 꽂지 않는다'))
+        return
     # ---- 강도 사다리 (위쪽 = TENS 쪽, 아래쪽 = PhotoMOS LED 구동)
     #  경로: a21 ← 리드 A → 게이팅 PhotoMOS → 20열(N0) → R1 470Ω → 17열(N1) → R2 1kΩ → 26열(N2) → STOP
     #  LA(17·18열)가 R1을, LB(26·27열)가 R2를 건너뛴다. 바이패스가 꺼지면 저항이 들어가 약해진다.
@@ -295,9 +302,13 @@ flex(RP('D5'), hole('g28'), BLU, (480, 820), (1114, 810))
 flex(RP('D6'), hole('g58'), BLU, (560, 880), (1774, 850))
 for n, col in [('D10', '#7a5c00'), ('D7', '#1d6b35'), ('D6', '#1f4f9e'), ('D5', '#1f4f9e'), ('D4', '#1d6b35')]:
     wtext(372, RIGHT[n] - 4, n, 11, 'start', c=col, bold=True)
-flex(RP('D11'), hole('j14'), TEAL, (420, 462), (640, 760))
-flex(RP('D12'), hole('j22'), TEAL, (440, 440), (820, 770))
-for pin, dst, lane in (('A0', 'j44', 0), ('A1', 'j52', 1)):   # 우노 왼쪽 헤더 → 왼쪽으로 돌아 보드 아래(IMU 위)로
+# 만능기판 축소 그림 (PERF 전용): 30열 x 24행, perfboard_7x9.png와 같은 좌표
+MP, MX, MY = 16, 800, 868
+def M(c, r): return (MX + (c - 1) * MP, MY + (r - 1) * MP)
+if not PERF:
+    flex(RP('D11'), hole('j14'), TEAL, (420, 462), (640, 760))
+    flex(RP('D12'), hole('j22'), TEAL, (440, 440), (820, 770))
+for pin, dst, lane in ((() if PERF else (('A0', 'j44', 0), ('A1', 'j52', 1)))):   # 우노 왼쪽 헤더 → 왼쪽으로 돌아 보드 아래(IMU 위)로
     (x1, y1), (x2, y2) = LP(pin), hole(dst)
     xl, yb = 18 - lane * 8, 784 + lane * 10
     flexpath(f'M{x1},{y1} L{xl+10},{y1} Q{xl},{y1} {xl},{y1+10} L{xl},{yb-10} Q{xl},{yb} {xl+10},{yb} '
@@ -305,7 +316,11 @@ for pin, dst, lane in (('A0', 'j44', 0), ('A1', 'j52', 1)):   # 우노 왼쪽 �
     wires.append(pin_end(x1, y1)); wires.append(pin_end(x2, y2))
 for n in ('D11', 'D12'):
     wtext(372, RIGHT[n] - 4, n, 11, 'start', c='#0f6f80', bold=True)
-steps.append(('공통', '우노 신호선', 'D9 → a3, D4 → j8, D5 → g28, D11 → j14, D12 → j22 (CH1) / D10 → e33, D7 → j38, D6 → g58, A0 → j44, A1 → j52 (CH2)'))
+steps.append(('공통', '우노 신호선', 'D9 → a3, D4 → j8, D5 → g28, D11 → j14, D12 → j22 (CH1) / D10 → e33, D7 → j38, D6 → g58, A0 → j44, A1 → j52 (CH2)') if not PERF else
+             ('공통', '우노 신호선', 'D9 → a3, D4 → j8, D5 → g28 (CH1) / D10 → e33, D7 → j38, D6 → g58 (CH2)'))
+if PERF:
+    steps.append(('공통', '우노 → 만능기판 H2 (브레드보드를 거치지 않음)', 'D11 → LA1, D12 → LB1, A0 → LA2, A1 → LB2. 330Ω은 만능기판에 있다'))
+    steps.append(('공통', 'GND → 만능기판 H2', '아래 − 레일 35열 → H2 GND (가운데 4핀 아무 곳)'))
 
 # ------------------------------------------------------------------ 패널 부품 (아래)
 if not SIMPLE:
@@ -336,100 +351,193 @@ else:
     steps.append(('공통', 'D2, D8', '비워 둔다 (실험자 E-STOP, 부저 생략)'))
 
 # ------------------------------------------------------------------ 출력부 (위 오른쪽)
-# TENS
-a('<rect x="1050" y="96" width="180" height="150" rx="16" fill="#f7f7f5" stroke="#9a9a9a" stroke-width="2" filter="url(#sh)"/>')
-a('<rect x="1072" y="112" width="136" height="54" rx="4" fill="#b9c7a9" stroke="#666"/>')
-text(1140, 136, 'Normal 300µs', 11, c='#223'); text(1140, 154, '40Hz  C', 11, c='#223')
-for kx in (1100, 1180):
-    a(f'<circle cx="{kx}" cy="98" r="15" fill="#555" stroke="#222" stroke-width="2"/><line x1="{kx}" y1="98" x2="{kx}" y2="85" stroke="#eee" stroke-width="2"/>')
-text(1100, 77, 'CH1', 10, bold=True); text(1180, 77, 'CH2', 10, bold=True)
-text(1140, 200, 'TENS 7000', 14, bold=True); text(1140, 220, '9V 건전지 · 노브 스토퍼', 10, c='#555')
-J1, J2 = (1100, 246), (1180, 246)
-a(f'<circle cx="{J1[0]}" cy="{J1[1]}" r="6" fill="#222"/><circle cx="{J2[0]}" cy="{J2[1]}" r="6" fill="#222"/>')
-# E-STOP
-ES = {}
-if not SIMPLE:
-    a('<rect x="1290" y="70" width="156" height="120" rx="8" fill="#f1c40f" stroke="#a88a0b" stroke-width="2" filter="url(#sh)"/>')
-    a('<circle cx="1368" cy="122" r="40" fill="#c0392b" stroke="#7d1f15" stroke-width="3"/><circle cx="1356" cy="110" r="12" fill="#e06b5e" opacity="0.6"/>')
-    text(1368, 63, '실험자 E-STOP', 12, bold=True)
-    blocks = {'NC1': 1295, 'NC2': 1345, 'NO': 1395}
-    for nm, bxx in blocks.items():
-        a(f'<rect x="{bxx}" y="192" width="44" height="30" rx="3" fill="#ddd" stroke="#888"/>')
-        text(bxx + 22, 205, nm, 9, c='#c0392b' if nm.startswith('NC') else '#1f4f9e', bold=True)
-        ES[nm] = ((bxx + 9, 216), (bxx + 35, 216))
-        for p in ES[nm]: a(f'<circle cx="{p[0]}" cy="{p[1]}" r="3.5" fill="#c9a227" stroke="#7a5c10"/>')
-# 참가자 STOP
-a('<rect x="1490" y="92" width="120" height="100" rx="10" fill="#2b2b2b" filter="url(#sh)"/>')
-a('<circle cx="1550" cy="135" r="28" fill="#27ae60" stroke="#145a32" stroke-width="3"/>')
-text(1550, 85, '참가자 STOP', 12, bold=True)
-PS = {}
-for nm, bxx in {'NC1': 1494, 'NC2': 1552}.items():
-    a(f'<rect x="{bxx}" y="194" width="54" height="26" rx="3" fill="#ddd" stroke="#888"/>')
-    text(bxx + 27, 206, nm, 9, c='#c0392b', bold=True)
-    PS[nm] = ((bxx + 10, 214), (bxx + 44, 214))
-    for p in PS[nm]: a(f'<circle cx="{p[0]}" cy="{p[1]}" r="3.5" fill="#c9a227" stroke="#7a5c10"/>')
-# 팔
-a('<rect x="1680" y="90" width="120" height="190" rx="34" fill="#f2d4bd" stroke="#c99f80" stroke-width="2"/>')
-a('<rect x="1830" y="90" width="140" height="190" rx="34" fill="#efcdb3" stroke="#c99f80" stroke-width="2"/>')
-text(1740, 82, '전완 (손목 신전근)', 11, bold=True); text(1900, 82, '위팔 뒤 (삼두근)', 11, bold=True)
-def pad(x, y, w, h, lab):
-    a(f'<rect x="{x-w/2}" y="{y-h/2}" width="{w}" height="{h}" rx="6" fill="#8fa7bf" stroke="#44617e" stroke-width="2"/>')
-    text(x, y + 4, lab, 10, c='#fff', bold=True)
-    return (x, y + h / 2)
-P1A, P1B = pad(1740, 130, 44, 44, 'A'), pad(1740, 225, 44, 44, 'B')
-P2A, P2B = pad(1900, 135, 46, 72, 'A'), pad(1900, 235, 46, 72, 'B')
-text(1795, 300, '패드 A = 근위(팔꿈치 쪽), B = 원위', 10, c='#555')
+if not PERF:
+    # TENS
+    a('<rect x="1050" y="96" width="180" height="150" rx="16" fill="#f7f7f5" stroke="#9a9a9a" stroke-width="2" filter="url(#sh)"/>')
+    a('<rect x="1072" y="112" width="136" height="54" rx="4" fill="#b9c7a9" stroke="#666"/>')
+    text(1140, 136, 'Normal 300µs', 11, c='#223'); text(1140, 154, '40Hz  C', 11, c='#223')
+    for kx in (1100, 1180):
+        a(f'<circle cx="{kx}" cy="98" r="15" fill="#555" stroke="#222" stroke-width="2"/><line x1="{kx}" y1="98" x2="{kx}" y2="85" stroke="#eee" stroke-width="2"/>')
+    text(1100, 77, 'CH1', 10, bold=True); text(1180, 77, 'CH2', 10, bold=True)
+    text(1140, 200, 'TENS 7000', 14, bold=True); text(1140, 220, '9V 건전지 · 노브 스토퍼', 10, c='#555')
+    J1, J2 = (1100, 246), (1180, 246)
+    a(f'<circle cx="{J1[0]}" cy="{J1[1]}" r="6" fill="#222"/><circle cx="{J2[0]}" cy="{J2[1]}" r="6" fill="#222"/>')
+    # E-STOP
+    ES = {}
+    if not SIMPLE:
+        a('<rect x="1290" y="70" width="156" height="120" rx="8" fill="#f1c40f" stroke="#a88a0b" stroke-width="2" filter="url(#sh)"/>')
+        a('<circle cx="1368" cy="122" r="40" fill="#c0392b" stroke="#7d1f15" stroke-width="3"/><circle cx="1356" cy="110" r="12" fill="#e06b5e" opacity="0.6"/>')
+        text(1368, 63, '실험자 E-STOP', 12, bold=True)
+        blocks = {'NC1': 1295, 'NC2': 1345, 'NO': 1395}
+        for nm, bxx in blocks.items():
+            a(f'<rect x="{bxx}" y="192" width="44" height="30" rx="3" fill="#ddd" stroke="#888"/>')
+            text(bxx + 22, 205, nm, 9, c='#c0392b' if nm.startswith('NC') else '#1f4f9e', bold=True)
+            ES[nm] = ((bxx + 9, 216), (bxx + 35, 216))
+            for p in ES[nm]: a(f'<circle cx="{p[0]}" cy="{p[1]}" r="3.5" fill="#c9a227" stroke="#7a5c10"/>')
+    # 참가자 STOP
+    a('<rect x="1490" y="92" width="120" height="100" rx="10" fill="#2b2b2b" filter="url(#sh)"/>')
+    a('<circle cx="1550" cy="135" r="28" fill="#27ae60" stroke="#145a32" stroke-width="3"/>')
+    text(1550, 85, '참가자 STOP', 12, bold=True)
+    PS = {}
+    for nm, bxx in {'NC1': 1494, 'NC2': 1552}.items():
+        a(f'<rect x="{bxx}" y="194" width="54" height="26" rx="3" fill="#ddd" stroke="#888"/>')
+        text(bxx + 27, 206, nm, 9, c='#c0392b', bold=True)
+        PS[nm] = ((bxx + 10, 214), (bxx + 44, 214))
+        for p in PS[nm]: a(f'<circle cx="{p[0]}" cy="{p[1]}" r="3.5" fill="#c9a227" stroke="#7a5c10"/>')
+    # 팔
+    a('<rect x="1680" y="90" width="120" height="190" rx="34" fill="#f2d4bd" stroke="#c99f80" stroke-width="2"/>')
+    a('<rect x="1830" y="90" width="140" height="190" rx="34" fill="#efcdb3" stroke="#c99f80" stroke-width="2"/>')
+    text(1740, 82, '전완 (손목 신전근)', 11, bold=True); text(1900, 82, '위팔 뒤 (삼두근)', 11, bold=True)
+    def pad(x, y, w, h, lab):
+        a(f'<rect x="{x-w/2}" y="{y-h/2}" width="{w}" height="{h}" rx="6" fill="#8fa7bf" stroke="#44617e" stroke-width="2"/>')
+        text(x, y + 4, lab, 10, c='#fff', bold=True)
+        return (x, y + h / 2)
+    P1A, P1B = pad(1740, 130, 44, 44, 'A'), pad(1740, 225, 44, 44, 'B')
+    P2A, P2B = pad(1900, 135, 46, 72, 'A'), pad(1900, 235, 46, 72, 'B')
+    text(1795, 300, '패드 A = 근위(팔꿈치 쪽), B = 원위', 10, c='#555')
 
-# 주황 배선
-flex(J1, hole('a21'), OR1, (1100, 330), (960, 290)); wtext(1060, 300, 'CH1 리드 A', 10, c=OR2, bold=True)
-flex(J2, hole('a51'), OR2, (1180, 330), (1620, 280)); wtext(1300, 330, 'CH2 리드 A', 10, c=OR2, bold=True)
-flex(PS['NC1'][1], P1A, OR1, (1538, 290), (1740, 260), end2_pin=False)
-flex((1108, 246), P1B, OR1, (1120, 300), (1740, 320), end2_pin=False)
-flex(PS['NC2'][1], P2A, OR2, (1596, 290), (1900, 300), end2_pin=False)
-flex((1188, 246), P2B, OR2, (1200, 320), (1900, 330), end2_pin=False)
-if SIMPLE:
-    flex(hole('a26'), PS['NC1'][0], OR1, (1070, 280), (1504, 290))
-    flex(hole('a56'), PS['NC2'][0], OR2, (1730, 270), (1562, 300))
-    steps.append(('공통', '참가자 STOP (2NC)', 'NC1: a26 ↔ CH1 패드 A, NC2: a56 ↔ CH2 패드 A'))
-else:
-    flex(hole('a26'), ES['NC1'][0], OR1, (1070, 280), (1304, 290))
-    flex(ES['NC1'][1], PS['NC1'][0], OR1, (1330, 280), (1504, 280))
-    flex(hole('a56'), ES['NC2'][0], OR2, (1730, 270), (1354, 300))
-    flex(ES['NC2'][1], PS['NC2'][0], OR2, (1380, 280), (1562, 290))
-    # E-STOP NO (저전압): D2와 GND
-    flexpath(f'M345,670 Q400,670 400,725 L400,1210 Q400,1232 422,1232 L1963,1232 Q1985,1232 1985,1210 L1985,322 Q1985,300 1963,300 L1426,300 Q1404,300 1404,280 L1404,{ES["NO"][0][1]}', '#7f8c8d')
-    wires.append(pin_end(*RP('D2'))); wires.append(pin_end(*ES['NO'][0]))
-    flex(ES['NO'][1], hole('T-57'), BLK, (1440, 290), (1752, 280)); used.add('T-57')
-    steps.append(('공통', '실험자 E-STOP', 'NC1: a26 ↔ 참가자 NC1 (CH1), NC2: a56 ↔ 참가자 NC2 (CH2), NO: 우노 D2 ↔ 위 − 레일 57열'))
-    steps.append(('공통', '참가자 STOP', 'NC1: E-STOP NC1 ↔ CH1 패드 A, NC2: E-STOP NC2 ↔ CH2 패드 A'))
+    # 주황 배선
+    flex(J1, hole('a21'), OR1, (1100, 330), (960, 290)); wtext(1060, 300, 'CH1 리드 A', 10, c=OR2, bold=True)
+    flex(J2, hole('a51'), OR2, (1180, 330), (1620, 280)); wtext(1300, 330, 'CH2 리드 A', 10, c=OR2, bold=True)
+    flex(PS['NC1'][1], P1A, OR1, (1538, 290), (1740, 260), end2_pin=False)
+    flex((1108, 246), P1B, OR1, (1120, 300), (1740, 320), end2_pin=False)
+    flex(PS['NC2'][1], P2A, OR2, (1596, 290), (1900, 300), end2_pin=False)
+    flex((1188, 246), P2B, OR2, (1200, 320), (1900, 330), end2_pin=False)
+    if SIMPLE:
+        flex(hole('a26'), PS['NC1'][0], OR1, (1070, 280), (1504, 290))
+        flex(hole('a56'), PS['NC2'][0], OR2, (1730, 270), (1562, 300))
+        steps.append(('공통', '참가자 STOP (2NC)', 'NC1: a26 ↔ CH1 패드 A, NC2: a56 ↔ CH2 패드 A'))
+    else:
+        flex(hole('a26'), ES['NC1'][0], OR1, (1070, 280), (1304, 290))
+        flex(ES['NC1'][1], PS['NC1'][0], OR1, (1330, 280), (1504, 280))
+        flex(hole('a56'), ES['NC2'][0], OR2, (1730, 270), (1354, 300))
+        flex(ES['NC2'][1], PS['NC2'][0], OR2, (1380, 280), (1562, 290))
+        # E-STOP NO (저전압): D2와 GND
+        flexpath(f'M345,670 Q400,670 400,725 L400,1210 Q400,1232 422,1232 L1963,1232 Q1985,1232 1985,1210 L1985,322 Q1985,300 1963,300 L1426,300 Q1404,300 1404,280 L1404,{ES["NO"][0][1]}', '#7f8c8d')
+        wires.append(pin_end(*RP('D2'))); wires.append(pin_end(*ES['NO'][0]))
+        flex(ES['NO'][1], hole('T-57'), BLK, (1440, 290), (1752, 280)); used.add('T-57')
+        steps.append(('공통', '실험자 E-STOP', 'NC1: a26 ↔ 참가자 NC1 (CH1), NC2: a56 ↔ 참가자 NC2 (CH2), NO: 우노 D2 ↔ 위 − 레일 57열'))
+        steps.append(('공통', '참가자 STOP', 'NC1: E-STOP NC1 ↔ CH1 패드 A, NC2: E-STOP NC2 ↔ CH2 패드 A'))
 
+
+if PERF:
+    PURW, SLATE = '#8e44ad', '#607d8b'
+    bw_, bh_ = 29 * MP + 36, 23 * MP + 36
+    a(f'<rect x="{MX-18}" y="{MY-18}" width="{bw_}" height="{bh_}" rx="8" fill="#c9a66b" stroke="#8a6d3b" stroke-width="2" filter="url(#sh)"/>')
+    def mband(r1, r2, fill):
+        a(f'<rect x="{MX-14}" y="{M(1,r1)[1]-MP/2}" width="{bw_-8}" height="{(r2-r1+1)*MP}" fill="{fill}"/>')
+    mband(1, 7, '#ff8a3d55'); mband(8, 9, '#d6272845'); mband(10, 15, '#2f6fd640'); mband(16, 17, '#d6272845'); mband(18, 24, '#b5530f55')
+    for c in range(1, 31):
+        for r in range(1, 25):
+            x, y = M(c, r); a(f'<circle cx="{x}" cy="{y}" r="2" fill="#7a5c20"/>')
+    for r in (2, 23):                                   # 단자대
+        for c in (3, 25):
+            x, y = M(c, r); a(f'<rect x="{x-11}" y="{y-17}" width="{2*MP+22}" height="34" rx="4" fill="#2f9e58" stroke="#1b6b39" stroke-width="1.5"/>')
+    for r in (5, 20):                                   # 사다리 저항
+        for c1, c2, v in ((8, 13, '470Ω'), (19, 24, '1kΩ')):
+            a(f'<rect x="{M(c1,r)[0]}" y="{M(c1,r)[1]-6}" width="{(c2-c1)*MP}" height="12" rx="6" fill="#8ec2e6" stroke="#4f7fa3"/>')
+            text((M(c1, r)[0] + M(c2, r)[0]) / 2, M(c1, r)[1] + 3.5, v, 8.5, c='#12324a', bold=True)
+    for rt in (7, 15):                                  # PhotoMOS 6개
+        for c, nm in ((5, '게이팅'), (11, 'LA'), (23, 'LB')):
+            x, y = M(c, rt); a(f'<rect x="{x-9}" y="{y+3}" width="{MP+18}" height="{3*MP-6}" rx="3" fill="#1c1c1c"/>')
+            text(x + MP / 2, y + 1.5 * MP + 3.5, nm, 8.5, c='#ffb070', bold=True)
+    for c, r in [(2, 11), (2, 12), (2, 13), (2, 14)] + [(c, r) for c in (17, 18) for r in (11, 12, 13, 14)]:
+        x, y = M(c, r); a(f'<rect x="{x-6.5}" y="{y-6.5}" width="13" height="13" fill="#151515"/><rect x="{x-2.8}" y="{y-2.8}" width="5.6" height="5.6" fill="#e0b84a"/>')
+    text(M(15.5, 1)[0], M(1, 2)[1] + 4, 'CH1 TENS 쪽', 11, c='#7d3a0a', bold=True)
+    text(M(15.5, 1)[0], M(1, 23)[1] + 4, 'CH2 TENS 쪽', 11, c='#7d3a0a', bold=True)
+    text(M(26, 1)[0], M(1, 12.5)[1] + 4, '저전압 쪽', 11, c='#1f4f9e', bold=True)
+    text(M(9, 1)[0], M(1, 12.5)[1] + 4, 'H1', 12, c='#222', bold=True)
+    def ortho(pts, col):
+        d = f'M{pts[0][0]},{pts[0][1]}'
+        for (x0_, y0_), (x1_, y1_), nxt in zip(pts, pts[1:], pts[2:] + [None]):
+            if nxt is None: d += f' L{x1_},{y1_}'; break
+            ux, uy = (x1_ > x0_) - (x1_ < x0_), (y1_ > y0_) - (y1_ < y0_)
+            vx, vy = (nxt[0] > x1_) - (nxt[0] < x1_), (nxt[1] > y1_) - (nxt[1] < y1_)
+            d += f' L{x1_-ux*12},{y1_-uy*12} Q{x1_},{y1_} {x1_+vx*12},{y1_+vy*12}'
+        flexpath(d, col, w=4.5); wires.append(pin_end(*pts[0])); wires.append(pin_end(*pts[-1]))
+    # H1: 브레드보드 20·21열, 50·51열 → 게이팅 PhotoMOS LED
+    for i, (h_, pin, col, lab) in enumerate((('j20', (2, 11), PURW, 'G1+'), ('j21', (2, 12), SLATE, 'G1−'),
+                                             ('j50', (2, 13), PURW, 'G2+'), ('j51', (2, 14), SLATE, 'G2−'))):
+        (hx_, hy_), (px, py) = hole(h_), M(*pin)
+        ortho([(hx_, hy_), (hx_, 790 + i * 9), (748 - i * 9, 790 + i * 9), (748 - i * 9, py), (px, py)], col)
+        wtext(px + 12, py + 4, lab, 10.5, 'start', c=col, bold=True)
+    for h_ in ('j20', 'j50'):
+        x_ = hole(h_)[0]
+        wires.append(f'<rect x="{x_+26}" y="627" width="96" height="17" rx="4" fill="#fff" stroke="#6c3483" opacity="0.95"/>')
+        wtext(x_ + 74, 640, f'{h_} · j{int(h_[1:])+1} → H1', 10.5, c='#6c3483', bold=True)
+    # H2: 우노에서 바로 (330Ω은 만능기판에)
+    ortho([RP('D11'), (430, RIGHT['D11']), (430, 766), (M(17, 1)[0], 766), M(17, 11)], TEAL)
+    ortho([RP('D12'), (444, RIGHT['D12']), (444, 778), (M(18, 1)[0], 778), M(18, 11)], TEAL)
+    for pin, tgt, lane in (('A0', (17, 14), 0), ('A1', (18, 14), 1)):
+        ortho([LP(pin), (18 - lane * 8, LEFT[pin]), (18 - lane * 8, MY + bh_ + lane * 10), (M(*tgt)[0], MY + bh_ + lane * 10), M(*tgt)], TEAL)
+    ortho([hole('B-35'), (hole('B-35')[0], 840), (MX + bw_ + 4, 840), (MX + bw_ + 4, M(1, 12)[1]), M(18, 12)], BLK); used.add('B-35')
+    for n in ('D11', 'D12'):
+        wtext(372, RIGHT[n] - 4, n, 11, 'start', c='#0f6f80', bold=True)
+    x17, x18 = M(17, 1)[0], M(18, 1)[0]
+    wtext(x17 - 12, M(1, 11)[1] + 4, 'LA1', 10.5, 'end', c='#0b5563', bold=True); wtext(x18 + 12, M(1, 11)[1] + 4, 'LB1', 10.5, 'start', c='#0b5563', bold=True)
+    wtext(x17 - 12, M(1, 14)[1] + 4, 'LA2', 10.5, 'end', c='#0b5563', bold=True); wtext(x18 + 12, M(1, 14)[1] + 4, 'LB2', 10.5, 'start', c='#0b5563', bold=True)
+    wtext(x17 - 12, M(1, 12.5)[1] + 4, 'H2', 12, 'end', c='#222', bold=True)
+    wtext(x18 + 12, M(1, 13)[1] + 6, 'GND', 10, 'start', c='#111', bold=True)
+    # 오른쪽 설명
+    RX, RY = MX + bw_ + 40, MY - 18
+    a(f'<rect x="{RX}" y="{RY}" width="{1960-RX}" height="{bh_}" rx="10" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>')
+    text(RX + 20, RY + 32, '만능기판 (출력부) 연결', 16, 'start', bold=True)
+    rows_ = [('H1 (왼쪽 4핀) ← 브레드보드', '#222', True),
+             ('  G1+ ← j20   (CH1 330Ω 뒤, 555 출력)', PURW, True), ('  G1− ← j21   (CH1 Q1 컬렉터)', SLATE, True),
+             ('  G2+ ← j50   (CH2 330Ω 뒤)', PURW, True), ('  G2− ← j51   (CH2 Q2 컬렉터)', SLATE, True),
+             ('H2 (가운데 2×4핀) ← 우노에서 바로', '#222', True),
+             ('  LA1 ← D11,  LB1 ← D12   (CH1 강도 사다리)', '#0b5563', True), ('  LA2 ← A0,   LB2 ← A1    (CH2 강도 사다리)', '#0b5563', True),
+             ('  GND ← 아래 − 레일 35열 (가운데 4핀 아무 곳)', '#111', True),
+             ('  330Ω 4개는 만능기판에 있다. 브레드보드에 두지 않는다', '#555', False),
+             ('단자대 (초록) ← TENS 리드 A, → 참가자 STOP', '#a84a08', True),
+             ('  TENS 선은 브레드보드를 거치지 않는다', '#a84a08', False),
+             ('자세한 구멍 위치: docs/perfboard_7x9.png, PERFBOARD.md', '#555', False)]
+    for i, (t_, c_, b_) in enumerate(rows_):
+        text(RX + 20, RY + 64 + i * 25.5, t_, 12.5, 'start', c=c_, bold=b_)
+    # 왼쪽: 바꾸는 순서
+    a('<rect x="40" y="965" width="690" height="290" rx="10" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>')
+    text(60, 995, '지금 브레드보드에서 바꾸는 순서', 16, 'start', bold=True)
+    for i, t_ in enumerate(['① TENS 전원을 끄고 리드선을 브레드보드에서 뺀다.',
+                            '② AQY 칩과 위쪽 a~e 17~27열 · 47~57열의 부품, 점퍼를 모두 뺀다.',
+                            '③ 사다리용 330Ω(i14~i17, g22~g26 등)과 GND 점퍼, D11 · D12 · A0 · A1 선도 뺀다.',
+                            '④ 게이팅용 330Ω(g12~g16)과 보라 점퍼(h16~h20, h23~h21)는 그대로 둔다.',
+                            '⑤ j20 → G1+, j21 → G1−, j50 → G2+, j51 → G2− 점퍼선을 꽂는다.',
+                            '⑥ 우노 D11 · D12 · A0 · A1과 GND(아래 − 레일 35열)를 만능기판 H2에 꽂는다.',
+                            '⑦ 만능기판 단자대에 LED 부하를 걸고 ssr_blink.py, ladder_test.py로 확인한다.',
+                            '555 · Q1~Q4 · 타이밍 부품 · D4~D7 · D9 · D10 선은 건드리지 않는다.']):
+        text(60, 1028 + i * 27, t_, 12.8, 'start', c='#1d6b35' if i == 7 else '#333', bold=(i == 7))
+
+LGX, LGY, LGW = (40, 1310, 1920) if PERF else (1010, 850, 955)
 # ------------------------------------------------------------------ 범례·주의
-a('<rect x="1010" y="850" width="955" height="265" rx="10" fill="#ffffff" stroke="#bdb6a6" stroke-width="1.5"/>')
-text(1030, 878, '범례 · 꼭 지킬 것', 16, 'start', bold=True)
-leg = [(RED, '5V'), (BLK, 'GND'), (YEL, '유지 신호 D9/D10'), (GRN, '트리거 D4/D7'), (BLU, '게이트 D5/D6'), (TEAL, '사다리 D11/D12/A0/A1'), ('#8e44ad', '보드 안'), (OR1, 'TENS 출력 (사람에게)')]
-lx = 1030
+a(f'<rect x="{LGX}" y="{LGY}" width="{LGW}" height="265" rx="10" fill="#ffffff" stroke="#bdb6a6" stroke-width="1.5"/>')
+text(LGX + 20, LGY + 28, '범례 · 꼭 지킬 것', 16, 'start', bold=True)
+leg = [(RED, '5V'), (BLK, 'GND'), (YEL, '유지 신호 D9/D10'), (GRN, '트리거 D4/D7'), (BLU, '게이트 D5/D6'), (TEAL, '사다리 D11/D12/A0/A1'), ('#8e44ad', '보드 안' + (' · H1 G+' if PERF else ''))] + ([('#607d8b', 'H1 G−')] if PERF else [(OR1, 'TENS 출력 (사람에게)')])
+lx = LGX + 20
 for col, t in leg:
-    a(f'<line x1="{lx}" y1="900" x2="{lx+26}" y2="900" stroke="{col}" stroke-width="6" stroke-linecap="round"/>')
-    text(lx + 32, 904, t, 11.5, 'start'); lx += 32 + len(t) * 7.6 + 12
+    a(f'<line x1="{lx}" y1="{LGY+50}" x2="{lx+26}" y2="{LGY+50}" stroke="{col}" stroke-width="6" stroke-linecap="round"/>')
+    text(lx + 32, LGY + 54, t, 11.5, 'start'); lx += 32 + len(t) * 7.6 + 12
 notes = [
-    '1. 주황 점선 칸(17~27열, 47~57열의 위쪽 a~e)은 TENS 전용. 사다리 부품 말고 다른 부품·선 금지, 그 위의 레일 구멍도 비워 둔다.',
+    ('1. 브레드보드에는 우노 쪽 저전압 회로만 남는다. TENS 선·리드선은 브레드보드에 꽂지 않고 만능기판 단자대로만 간다.' if PERF else
+     '1. 주황 점선 칸(17~27열, 47~57열의 위쪽 a~e)은 TENS 전용. 사다리 부품 말고 다른 부품·선 금지, 그 위의 레일 구멍도 비워 둔다.'),
     '2. 2N3904는 평평한 면이 가운데 홈 쪽. 노란 글자 E·B·C가 다리 위치다 (Q3·Q4는 E-B-C, Q1·Q2는 C-B-E 순서로 보임).',
-    '3. TLC555와 AQY210EH는 홈(반달)이 왼쪽, 점이 1번 핀. 칩 아래쪽 줄(f)이 1번부터 시작한다.',
+    ('3. TLC555는 홈(반달)이 왼쪽. AQY 칩 6개와 사다리 부품(470Ω, 1kΩ, 330Ω)은 브레드보드에서 빼서 만능기판에 납땜한다.' if PERF else
+     '3. TLC555와 AQY210EH는 홈(반달)이 왼쪽, 점이 1번 핀. 칩 아래쪽 줄(f)이 1번부터 시작한다.'),
     ('4. 간소화판: D3은 GND에 상시 연결, D2·D8은 비워 둔다. 참가자 STOP(2NC)이 두 채널을 끊고, 실험자는 SPACE 키(전부 정지)를 맡는다.' if SIMPLE else
      '4. 2채널을 비상정지 하나로 동시에 끊으려면 E-STOP에 NC 접점 블록 1개를 추가하고, 참가자 STOP도 2NC로 준비한다.'),
-    '5. 첫 테스트는 TENS 대신 a21·a26에 건전지 + LED + 1kΩ을 걸어 깜빡임만 본다. 강도 단계는 $L,1,0~3, 부팅 시 3(노브 세기).',
+    ('5. H1: j20 → G1+, j21 → G1−, j50 → G2+, j51 → G2−.  H2: D11·D12·A0·A1과 GND를 우노에서 바로. 첫 테스트는 만능기판 단자대에 LED 부하.' if PERF else
+     '5. 첫 테스트는 TENS 대신 a21·a26에 건전지 + LED + 1kΩ을 걸어 깜빡임만 본다. 강도 단계는 $L,1,0~3, 부팅 시 3(노브 세기).'),
     '6. 전극은 팔에만. 가슴·목·머리 금지, 양팔에 걸친 배치 금지. 사람 연결은 GUIDE.md 벤치 검사 통과 후.',
     '7. 꽂는 위치 전체 목록: docs/BREADBOARD' + SUF + '.md',
 ]
 for i, t in enumerate(notes):
-    text(1030, 934 + i * 25, t, 12, 'start', c='#d62728' if i == 5 else '#333', bold=(i == 5))
+    text(LGX + 20, LGY + 84 + i * 25, t, 12, 'start', c='#d62728' if i == 5 else '#333', bold=(i == 5))
 
 o.extend(wires)
 o.append('</svg>')
 io.open(os.path.join(DOCS, 'breadboard_830' + SUF + '.svg'), 'w', encoding='utf-8').write('\n'.join(o))
 
 # ------------------------------------------------------------------ markdown
-md = ['# 브레드보드 꽂는 위치 목록 (830홀, 우노, 2채널 v2)' + (' — 간소화판 (키스위치·부저·실험자 E-STOP 생략)' if SIMPLE else ''), '',
+md = ['# 브레드보드 꽂는 위치 목록 (830홀, 우노, 2채널 v2)' + (' — 만능기판 연결판 (출력부를 만능기판으로 옮긴 뒤, 간소화판 기준)' if PERF else ' — 간소화판 (키스위치·부저·실험자 E-STOP 생략)' if SIMPLE else ''), '',
       '그림: [breadboard_830' + SUF + '.png](breadboard_830' + SUF + '.png). 열 번호 1~63, 행 a~j. 위쪽 레일은 바깥쪽 빨강 줄이 +5V, 안쪽 파랑 줄이 GND. 아래쪽은 안쪽 파랑이 GND, 바깥쪽 빨강이 +5V.',
       '', '레일 구멍은 5개씩 묶여 있고 7·13·19·25·31·37·43·49·55·61열 자리는 비어 있다.', '']
 for grp in ['공통', 'CH1', 'CH2']:
@@ -438,6 +546,14 @@ for grp in ['공통', 'CH1', 'CH2']:
     for g, what, where in steps:
         if g == grp: md.append(f'| {what} | {where} |')
     md.append('')
+if PERF:
+    md += ['## 지금 브레드보드에서 바꾸는 순서', '',
+           '1. TENS 전원을 끄고 리드선을 브레드보드에서 뺀다.',
+           '2. AQY 칩(20·21열, 50·51열, 사다리를 꽂았다면 17·18·26·27열과 CH2 쪽)과 위쪽 a~e 17~27열·47~57열의 부품·점퍼를 모두 뺀다.',
+           '3. 사다리용 330Ω(i14~i17, g22~g26 등)과 그 GND 점퍼, D11·D12·A0·A1 선도 뺀다. 이 선들은 만능기판 H2로 바로 간다.',
+           '4. j20 → H1 G1+, j21 → H1 G1−, j50 → H1 G2+, j51 → H1 G2− 점퍼선을 꽂는다. 게이팅용 330Ω(g12~g16)과 보라 점퍼(h16~h20, h23~h21)는 그대로 둔다.',
+           '5. 아래 − 레일 35열 → H2 GND, 우노 D11·D12·A0·A1 → H2.',
+           '6. 만능기판 쪽 배치와 납땜은 [PERFBOARD.md](PERFBOARD.md), 그림은 [perfboard_7x9.png](perfboard_7x9.png).', '']
 md += ['## 조립 순서', '',
        '1. 레일: 우노 5V·GND를 위 레일에, 59·60열에서 위아래 레일을 잇는다.',
        '2. CH1의 TLC555와 AQY210EH를 가운데 홈에 걸쳐 꽂는다 (홈이 왼쪽).',
