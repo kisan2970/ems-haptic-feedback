@@ -12,9 +12,9 @@
 |---|---|
 | 분야 | HCI, 피지컬 컴퓨팅, EMS(Electrical Muscle Stimulation) 햅틱 |
 | 맥락 | 대학 인터랙티브 시스템 프로토타이핑 과목 프로젝트 (2026 가을) |
-| 시연 | ① 총 반동: 손목 신전근 120ms 자극 ② 물체 무게: 손목 신전근 + 삼두근 지속 자극과 시각 지연(pseudo-haptics) |
-| 하드웨어 | Arduino Uno, MPU-6050 IMU, TENS 7000 계열(9V, 300µs, 40Hz), AQY210EH PhotoMOS, TLC555 |
-| 소프트웨어 | Arduino C++ 펌웨어(논블로킹 상태머신), Processing 4 시연 화면, 체크섬 시리얼 프로토콜 |
+| 시연 | ① 총 반동: 손목 신전근 120ms 자극 ② 물체 무게: 손목 신전근 + 삼두근 지속 자극과 시각 지연(pseudo-haptics) ③ 공 2개 블라인드 무게 비교 |
+| 하드웨어 | Arduino Uno, MPU-6050 IMU, TENS 7000 계열(9V, 300µs, 40Hz), AQY210EH PhotoMOS(게이팅 + 강도 사다리), TLC555 |
+| 소프트웨어 | Arduino C++ 펌웨어 v2.2(논블로킹 상태머신), Processing 4 시연 화면, 체크섬 시리얼 프로토콜, PC 펌웨어 시뮬레이터 |
 | 선행 연구 | Lopes et al. *Impacto* (UIST 2015), *Providing Haptics to Walls & Heavy Objects in VR by Means of EMS* (CHI 2017) |
 
 ## 핵심 설계
@@ -23,7 +23,8 @@
 - **광 절연 게이팅**: PhotoMOS(1.5kV 절연)가 TENS 출력선 한 가닥을 1ms 단위로 개폐한다. PC·아두이노와 인체 사이에 전기적 경로가 없다.
 - **5겹 안전 구조**: 기기 노브 물리 스토퍼, 전극 경로 직렬 비상정지 2개, 유지 신호가 끊기면 0.05초 안에 차단하는 555 하드웨어 감시, 펌웨어 예산·하트비트·워치독, 참가자 스크리닝 절차.
 - **두 가지 자극 모드**: 반동은 60~250ms 단발(`$T`), 무게는 PC가 100ms마다 재전송하는 동안 최대 5초 지속(`$W`).
-- **무게 단계 표현**: 강도 대신 채널을 쌓는다(없음 / 손목 / 손목+삼두근). 화면 속 손이 실제 팔보다 늦게 따라오는 시각 지연을 함께 써서 무게 범위를 넓힌다.
+- **강도 사다리 (v2.2)**: 출력 경로에 470Ω·1kΩ을 직렬로 넣고 PhotoMOS 2개로 각각 건너뛰어 세기를 4단계로 바꾼다(`$L`). 노브로 정한 세기보다 세질 수 없고, 리셋되면 가장 약한 단계가 된다. 상세는 1.4b.
+- **무게 단계 표현**: 채널을 쌓는다(없음 / 손목 / 손목+삼두근). 화면 속 손이 실제 팔보다 늦게 따라오는 시각 지연을 함께 써서 무게 범위를 넓힌다.
 
 ## 저장소 구성
 
@@ -44,20 +45,50 @@
 ├── docs/breadboard_830_perf.png / BREADBOARD_perf.md   출력부를 만능기판으로 옮긴 뒤의 브레드보드 (구상안)
 ├── firmware/ems_recoil/ems_recoil.ino          Arduino Uno 펌웨어 v2.2 (반동 + 무게 + 강도 사다리)
 ├── firmware/ems_recoil_esp32/                  ESP32 펌웨어 v2.2 (우노와 같은 로직, KA GPIO32/33, 사다리 GPIO23/4/13/14, VR 단계용)
-├── processing/EMSRecoilSim/EMSRecoilSim.pde    시연 화면 (총 / 들기 / 벽 모드)
-└── tools/                                      시리얼 자동 검사, 배선도 생성 스크립트
+├── processing/EMSRecoilSim/EMSRecoilSim.pde    시연 화면 (총 / 들기 / 벽 / 공 비교 모드, -/= 강도 단계)
+├── tools/board_check.py, serial_test.py        보드 자동 점검 12항목, 시리얼 응답 점검
+├── tools/ssr_blink.py, duty_test.py, ladder_test.py   LED 부하로 게이팅 · 듀티 · 강도 사다리 확인
+├── tools/firmware_sim/                         하드웨어 없이 PC에서 펌웨어 안전 예산·사다리 12항목 시뮬레이션
+└── tools/make_*.py                             배선도 · 배치도 그림 생성 스크립트
 ```
 
-## 진행 상황
+## 진행 상황 (2026-11)
 
 - [x] 설계 (회로, 안전 구조, 프로토콜, 매핑)
-- [x] 펌웨어 v1 우노 업로드 및 시리얼 응답 검증
-- [x] TENS 기기 단독 확인 (Width 300µs, 근수축 체감)
-- [x] 펌웨어 v2 (반동 + 무게), 시간 계산 버그 수정
-- [x] 브레드보드 회로 조립 (간소화판), 자동 점검 12/12, CH1 PhotoMOS 확인
-- [x] Processing 공 2개 블라인드 무게 비교 모드
-- [ ] 벤치 검사 (저항 부하, 안전장치 9종)
+- [x] TENS 기기 단독 확인 (Width 300µs, 40Hz, 근수축 체감)
+- [x] 브레드보드 회로 조립 (간소화판), 자동 점검 12/12, CH1 PhotoMOS 켬 22Ω / 끔 OL
+- [x] 펌웨어 v2.1: 안전 예산 버그 수정 (분당 반동 제한, 무게 누적, 정지 경로 누락, I2C 타임아웃)
+- [x] 펌웨어 v2.2: 강도 사다리 4단계. PC 시뮬레이션 12/12 (우노 · ESP32)
+- [x] Processing 공 2개 블라인드 무게 비교 모드 (화면 지연 켜기/끄기, CSV 기록)
+- [x] LED 부하로 TENS 게이팅 확인: 아밍 전 꺼짐, 명령 시 켜짐 (11/9)
+- [x] 만능기판 출력부 배치 구상안, 만능기판 연결판 브레드보드 그림
+- [ ] v2.2 보드 업로드 후 재점검, 강도 사다리 LED 확인 (`ladder_test.py`)
+- [ ] 하드웨어 차단 시험 (D9 뽑기), TENS 단독 팔 무게감 시험
+- [ ] 만능기판 납땜, 절연 확인 (멀티미터)
+- [ ] 벤치 검사 (저항 부하, 안전장치 11종)
 - [ ] 본인 캘리브레이션, 시연, 발표
+
+아직 실물로 확인하지 않은 것: 강도 사다리, 만능기판 배치(구상안). 우노 포트는 COM11에서 COM17로 바뀌었다.
+
+## 그림
+
+| 그림 | 내용 |
+|---|---|
+| [wiring_ch1_uno.png](docs/wiring_ch1_uno.png) | CH1 회로 배선도 |
+| [breadboard_830_simple.png](docs/breadboard_830_simple.png) | 브레드보드 실물 배치도, 간소화판 v2.2 (강도 사다리 포함) |
+| [output_wiring_simple.png](docs/output_wiring_simple.png) | 출력부 실물 연결: 리드선 → 게이팅 · 사다리 → 참가자 STOP → 패드 |
+| [perfboard_7x9.png](docs/perfboard_7x9.png) | 만능기판(7×9cm) 출력부 배치 구상안 |
+| [breadboard_830_perf.png](docs/breadboard_830_perf.png) | 출력부를 만능기판으로 옮긴 뒤의 브레드보드 (구상안) |
+| [pad_placement.png](docs/pad_placement.png) | 전극 패드 붙이는 위치 |
+| [probe_a20_a21.png](docs/probe_a20_a21.png) | 멀티미터로 PhotoMOS 확인하는 법 |
+
+### 만능기판 출력부 배치 (구상안)
+
+![만능기판 배치](docs/perfboard_7x9.png)
+
+### 만능기판 연결판 브레드보드 (구상안)
+
+![만능기판 연결판 브레드보드](docs/breadboard_830_perf.png)
 
 ## 안전 고지
 
