@@ -3,9 +3,11 @@
 """
 import io, os, math, sys
 
-PERF = "--perf" in sys.argv       # 출력부(게이팅·사다리 PhotoMOS)를 만능기판으로 옮긴 뒤의 브레드보드 (간소화판 기준)
+ESP = "--esp32" in sys.argv      # 만능기판 연결판을 ESP32 DevKit V1(+확장보드)로 옮긴 판. 핀 자리는 우노 그림과 같고 이름만 바뀐다
+PERF = "--perf" in sys.argv or ESP       # 출력부(게이팅·사다리 PhotoMOS)를 만능기판으로 옮긴 뒤의 브레드보드 (간소화판 기준)
 SIMPLE = "--simple" in sys.argv or PERF   # 키스위치·부저·실험자 E-STOP 생략판
-SUF = "_perf" if PERF else "_simple" if SIMPLE else ""
+SUF = "_esp32" if ESP else "_perf" if PERF else "_simple" if SIMPLE else ""
+GR = "150Ω" if ESP else "330Ω"   # 게이팅 PhotoMOS LED 저항 (555 출력 뒤). 3.3V에서는 150Ω
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(HERE, '..', 'docs')
@@ -57,6 +59,7 @@ RES = {
     '500kΩ': ['green', 'black', 'black', 'orange', 'brown'],
     '470kΩ': ['yellow', 'violet', 'black', 'orange', 'brown'],
     '470Ω': ['yellow', 'violet', 'black', 'black', 'brown'],
+    '150Ω': ['brown', 'green', 'black', 'black', 'brown'],
 }
 
 def pin_end(x, y):
@@ -201,7 +204,7 @@ def channel(o, ch, ka_hole):
     jumper(f'j{10+o}', f'B-{10+o}', BLK, ch, '555 1번 → GND')
     resistor(f'i{11+o}', f'B+{11+o}', '10kΩ', ch, lab_off=(-23, 18))
     jumper(f'j{13+o}', f'B+{14+o}', RED, ch, '555 4번 → 5V')
-    resistor(f'g{12+o}', f'g{16+o}', '330Ω', ch, lab_off=(0, -11))
+    resistor(f'g{12+o}', f'g{16+o}', GR, ch, lab_off=(0, -11))
     jumper(f'h{16+o}', f'h{20+o}', '#8e44ad', ch, '330Ω → PhotoMOS 1번' if not PERF else f'330Ω → {20+o}열 (만능기판 G+로 나가는 줄)')
     if not PERF: dip(20 + o, 2, 'AQY', ch, '4  3')
     to92([23 + o, 24 + o, 25 + o], 'f', f'Q{1 if o == 0 else 2} 2N3904', ch, ['C', 'B', 'E'])
@@ -257,10 +260,10 @@ a('<rect x="175" y="268" width="56" height="34" rx="6" fill="#c8c8c8" stroke="#8
 text(203, 290, 'USB-C', 9, c='#444', bold=True)
 a('<rect x="270" y="262" width="48" height="44" rx="4" fill="#222"/>')
 a('<rect x="170" y="470" width="96" height="96" rx="4" fill="#202020" stroke="#000"/>')
-text(218, 515, 'ATmega', 11, c='#ccc'); text(218, 530, '328P', 11, c='#ccc')
+text(218, 515, 'ESP32-' if ESP else 'ATmega', 11, c='#ccc'); text(218, 530, 'WROOM' if ESP else '328P', 11, c='#ccc')
 a('<rect x="205" y="360" width="30" height="20" rx="3" fill="#ddd"/><circle cx="220" cy="370" r="6" fill="#c33"/>')
-text(220, 640, 'UNO R3', 22, c='#fff', bold=True)
-text(220, 662, 'COM11', 12, c='#bfe0f5')
+text(220, 640, 'ESP32 DevKit' if ESP else 'UNO R3', 20 if ESP else 22, c='#fff', bold=True)
+text(220, 662, '+ 확장보드 · 핀 이름으로 찾는다' if ESP else 'COM11', 12, c='#bfe0f5')
 RIGHT = {'SCL': 330, 'SDA': 352, 'AREF': 374, 'GND ': 396, 'D13': 418, 'D12': 440, 'D11': 462, 'D10': 484, 'D9': 506, 'D8': 528,
          'D7': 560, 'D6': 582, 'D5': 604, 'D4': 626, 'D3': 648, 'D2': 670, 'D1': 692, 'D0': 714}
 LEFT = {'IOREF': 422, 'RESET': 444, '3.3V': 466, '5V': 488, 'GND': 510, 'GND2': 532, 'VIN': 554,
@@ -268,9 +271,9 @@ LEFT = {'IOREF': 422, 'RESET': 444, '3.3V': 466, '5V': 488, 'GND': 510, 'GND2': 
 a('<rect x="337" y="318" width="16" height="222" rx="2" fill="#1a1a1a"/><rect x="337" y="548" width="16" height="178" rx="2" fill="#1a1a1a"/>')
 a('<rect x="87" y="410" width="16" height="156" rx="2" fill="#1a1a1a"/><rect x="87" y="578" width="16" height="134" rx="2" fill="#1a1a1a"/>')
 for n, y in RIGHT.items():
-    a(f'<rect x="341" y="{y-4}" width="8" height="8" fill="#555"/>'); text(330, y + 4, n.strip(), 10, 'end', c='#fff', bold=True)
+    a(f'<rect x="341" y="{y-4}" width="8" height="8" fill="#555"/>'); text(330, y + 4, '' if ESP and n.strip() in ('SCL', 'SDA', 'AREF', 'D1', 'D0') else n.strip(), 10, 'end', c='#fff', bold=True)
 for n, y in LEFT.items():
-    a(f'<rect x="91" y="{y-4}" width="8" height="8" fill="#555"/>'); text(110, y + 4, 'GND' if n == 'GND2' else n, 10, 'start', c='#fff', bold=True)
+    a(f'<rect x="91" y="{y-4}" width="8" height="8" fill="#555"/>'); text(110, y + 4, 'GND' if n == 'GND2' else '' if ESP and n in ('IOREF', 'A2', 'A3') else n, 10, 'start', c='#fff', bold=True)
 def RP(n): return (345, RIGHT[n])
 def LP(n): return (95, LEFT[n])
 
@@ -483,8 +486,8 @@ if PERF:
     a(f'<rect x="{RX}" y="{RY}" width="{1960-RX}" height="{bh_}" rx="10" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>')
     text(RX + 20, RY + 32, '만능기판 (출력부) 연결', 16, 'start', bold=True)
     rows_ = [('H1 (왼쪽 4핀) ← 브레드보드', '#222', True),
-             ('  G1+ ← j20   (CH1 330Ω 뒤, 555 출력)', PURW, True), ('  G1− ← j21   (CH1 Q1 컬렉터)', SLATE, True),
-             ('  G2+ ← j50   (CH2 330Ω 뒤)', PURW, True), ('  G2− ← j51   (CH2 Q2 컬렉터)', SLATE, True),
+             (f'  G1+ ← j20   (CH1 {GR} 뒤, 555 출력)', PURW, True), ('  G1− ← j21   (CH1 Q1 컬렉터)', SLATE, True),
+             (f'  G2+ ← j50   (CH2 {GR} 뒤)', PURW, True), ('  G2− ← j51   (CH2 Q2 컬렉터)', SLATE, True),
              ('H2 (가운데 2×4핀) ← 우노에서 바로', '#222', True),
              ('  LA1 ← D11,  LB1 ← D12   (CH1 강도 사다리)', '#0b5563', True), ('  LA2 ← A0,   LB2 ← A1    (CH2 강도 사다리)', '#0b5563', True),
              ('  GND ← 아래 − 레일 35열 (가운데 4핀 아무 곳)', '#111', True),
@@ -496,16 +499,25 @@ if PERF:
         text(RX + 20, RY + 64 + i * 25.5, t_, 12.5, 'start', c=c_, bold=b_)
     # 왼쪽: 바꾸는 순서
     a('<rect x="40" y="965" width="690" height="290" rx="10" fill="#fff" stroke="#bdb6a6" stroke-width="1.5"/>')
-    text(60, 995, '지금 브레드보드에서 바꾸는 순서', 16, 'start', bold=True)
-    for i, t_ in enumerate(['① TENS 전원을 끄고 리드선을 브레드보드에서 뺀다.',
-                            '② AQY 칩과 위쪽 a~e 17~27열 · 47~57열의 부품, 점퍼를 모두 뺀다.',
-                            '③ 사다리용 330Ω(i14~i17, g22~g26 등)과 GND 점퍼, D11 · D12 · A0 · A1 선도 뺀다.',
-                            '④ 게이팅용 330Ω(g12~g16)과 보라 점퍼(h16~h20, h23~h21)는 그대로 둔다.',
-                            '⑤ j20 → G1+, j21 → G1−, j50 → G2+, j51 → G2− 점퍼선을 꽂는다.',
-                            '⑥ 우노 D11 · D12 · A0 · A1과 GND(아래 − 레일 35열)를 만능기판 H2에 꽂는다.',
-                            '⑦ 만능기판 단자대에 LED 부하를 걸고 ssr_blink.py, ladder_test.py로 확인한다.',
-                            '555 · Q1~Q4 · 타이밍 부품 · D4~D7 · D9 · D10 선은 건드리지 않는다.']):
-        text(60, 1028 + i * 27, t_, 12.8, 'start', c='#1d6b35' if i == 7 else '#333', bold=(i == 7))
+    text(60, 995, 'Uno에서 ESP32로 옮기는 순서' if ESP else '지금 브레드보드에서 바꾸는 순서', 16, 'start', bold=True)
+    change = ['① 조건: Uno에서 ladder_test.py 통과 (강도 3 → 0으로 LED가 어두워짐). 그 전에는 옮기지 않는다.',
+              '② Uno 선을 모두 뽑는다. 위 + 레일은 5 V가 아니라 ESP32 3V3에 꽂는다 (확장보드 V 점퍼가 3.3 V인지 확인).',
+              '③ 게이팅용 330Ω(g12~g16, g42~g46)을 150Ω으로 바꾼다. 555 · Q1~Q4 · 타이밍 부품은 그대로.',
+              '④ G32 → a3, G17 → j8, G16 → g28 / G33 → e33, G19 → j38, G18 → g58 / G27 → 아래 − 레일 32열.',
+              '⑤ 만능기판 H2: G23 → LA1, G4 → LB1, G13 → LA2, G14 → LB2, GND.  IMU: 3V3, GND, G21(SDA), G22(SCL).',
+              '⑥ ESP32 펌웨어 업로드 → board_check.py → LED 부하로 ssr_blink.py, ladder_test.py를 다시 통과.',
+              '⑦ LED가 안 켜지거나 흐리면 555 3번 전압이 낮은 것이다. 사람에게 연결하지 말고 멈춘다.',
+              '5 V 선은 브레드보드에 하나도 남기지 않는다 (ESP32 핀은 3.3 V까지만 견딘다).'] if ESP else [
+              '① TENS 전원을 끄고 리드선을 브레드보드에서 뺀다.',
+              '② AQY 칩과 위쪽 a~e 17~27열 · 47~57열의 부품, 점퍼를 모두 뺀다.',
+              '③ 사다리용 330Ω(i14~i17, g22~g26 등)과 GND 점퍼, D11 · D12 · A0 · A1 선도 뺀다.',
+              '④ 게이팅용 330Ω(g12~g16)과 보라 점퍼(h16~h20, h23~h21)는 그대로 둔다.',
+              '⑤ j20 → G1+, j21 → G1−, j50 → G2+, j51 → G2− 점퍼선을 꽂는다.',
+              '⑥ 우노 D11 · D12 · A0 · A1과 GND(아래 − 레일 35열)를 만능기판 H2에 꽂는다.',
+              '⑦ 만능기판 단자대에 LED 부하를 걸고 ssr_blink.py, ladder_test.py로 확인한다.',
+              '555 · Q1~Q4 · 타이밍 부품 · D4~D7 · D9 · D10 선은 건드리지 않는다.']
+    for i, t_ in enumerate(change):
+        text(60, 1028 + i * 27, t_, 12.4 if ESP else 12.8, 'start', c=('#b02a1f' if ESP else '#1d6b35') if i == 7 else '#333', bold=(i == 7))
 
 LGX, LGY, LGW = (40, 1310, 1920) if PERF else (1010, 850, 955)
 # ------------------------------------------------------------------ 범례·주의
@@ -515,7 +527,7 @@ leg = [(RED, '5V'), (BLK, 'GND'), (YEL, '유지 신호 D9/D10'), (GRN, '트리�
 lx = LGX + 20
 for col, t in leg:
     a(f'<line x1="{lx}" y1="{LGY+50}" x2="{lx+26}" y2="{LGY+50}" stroke="{col}" stroke-width="6" stroke-linecap="round"/>')
-    text(lx + 32, LGY + 54, t, 11.5, 'start'); lx += 32 + len(t) * 7.6 + 12
+    text(lx + 32, LGY + 54, t, 11.5, 'start'); lx += 32 + len(t) * (9.2 if PERF else 7.6) + 12
 notes = [
     ('1. 브레드보드에는 우노 쪽 저전압 회로만 남는다. TENS 선·리드선은 브레드보드에 꽂지 않고 만능기판 단자대로만 간다.' if PERF else
      '1. 주황 점선 칸(17~27열, 47~57열의 위쪽 a~e)은 TENS 전용. 사다리 부품 말고 다른 부품·선 금지, 그 위의 레일 구멍도 비워 둔다.'),
@@ -534,6 +546,16 @@ for i, t in enumerate(notes):
 
 o.extend(wires)
 o.append('</svg>')
+import re
+ESP_MAP = {'D9': 'G32', 'D10': 'G33', 'D4': 'G17', 'D5': 'G16', 'D7': 'G19', 'D6': 'G18', 'D11': 'G23', 'D12': 'G4',
+           'A0': 'G13', 'A1': 'G14', 'D3': 'G27', 'D2': 'G26', 'D8': 'G25', 'D13': 'G2', 'A4': 'G21', 'A5': 'G22',
+           '5V': '3V3', '3.3V': '3V3', 'RESET': 'EN',
+           '아두이노 우노': 'ESP32 DevKit V1', '우노': 'ESP32'}
+ESP_RE = re.compile('|'.join(sorted((re.escape(k) if k[0] > '~' else r'(?<![A-Za-z0-9.#])' + re.escape(k) + r'(?![A-Za-z0-9])' for k in ESP_MAP), key=len, reverse=True)))
+def esp_names(txt):
+    if not ESP: return txt
+    return re.sub(r'>([^<]*)<', lambda m: '>' + ESP_RE.sub(lambda k: ESP_MAP[k.group(0)], m.group(1)) + '<', txt) if txt.lstrip().startswith('<') else ESP_RE.sub(lambda k: ESP_MAP[k.group(0)], txt)
+o = [esp_names(x) for x in o]
 io.open(os.path.join(DOCS, 'breadboard_830' + SUF + '.svg'), 'w', encoding='utf-8').write('\n'.join(o))
 
 # ------------------------------------------------------------------ markdown
@@ -547,7 +569,7 @@ for grp in ['공통', 'CH1', 'CH2']:
         if g == grp: md.append(f'| {what} | {where} |')
     md.append('')
 if PERF:
-    md += ['## 지금 브레드보드에서 바꾸는 순서', '',
+    md += ['## Uno에서 ESP32로 옮기는 순서', ''] + [f'{i+1}. ' + t_[2:] for i, t_ in enumerate(change[:7])] + ['', '**' + change[7] + '**', ''] if ESP else ['## 지금 브레드보드에서 바꾸는 순서', '',
            '1. TENS 전원을 끄고 리드선을 브레드보드에서 뺀다.',
            '2. AQY 칩(20·21열, 50·51열, 사다리를 꽂았다면 17·18·26·27열과 CH2 쪽)과 위쪽 a~e 17~27열·47~57열의 부품·점퍼를 모두 뺀다.',
            '3. 사다리용 330Ω(i14~i17, g22~g26 등)과 그 GND 점퍼, D11·D12·A0·A1 선도 뺀다. 이 선들은 만능기판 H2로 바로 간다.',
@@ -562,5 +584,5 @@ md += ['## 조립 순서', '',
        '5. 통과하면 CH2를 30열 오른쪽에 똑같이 복제 (D10, D7, D6).',
        '5-1. 강도 사다리 (v2.2): 채널마다 AQY 2개(LA·LB), 470Ω·1kΩ, 330Ω 2개, 점퍼. 우노 D11·D12(CH1), A0·A1(CH2). TENS 없이 `ladder_test.py`로 먼저 확인.',
        ('6. 마지막에 참가자 STOP·TENS 출력(주황). 실험자는 SPACE 키를 맡는다. 리드선 연결은 [output_wiring_simple.png](output_wiring_simple.png).' if SIMPLE else '6. 마지막에 비상정지·참가자 STOP·TENS 출력(주황).'), '']
-io.open(os.path.join(DOCS, 'BREADBOARD' + SUF + '.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(md))
+io.open(os.path.join(DOCS, 'BREADBOARD' + SUF + '.md'), 'w', encoding='utf-8', newline='\n').write(esp_names('\n'.join(md)))
 print('ok', len(used), 'holes')
