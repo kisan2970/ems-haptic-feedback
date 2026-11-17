@@ -116,16 +116,35 @@ CH2: 트리거 D7, 게이트 D6, 유지 신호 D10, 같은 회로를 30열 오�
 
 ---
 
-## 5. 소프트웨어
+## 5. 만든 그림 (`docs/`)
 
-### 5.1 펌웨어 v2 (`firmware/ems_recoil/ems_recoil.ino`)
+| 파일 | 내용 |
+|---|---|
+| `wiring_ch1_uno.png` | CH1 회로 배선도 v2 |
+| `breadboard_830.png` / `BREADBOARD.md` | 830홀 브레드보드 실물 배치도와 구멍별 목록 (전체판) |
+| `breadboard_830_simple.png` / `BREADBOARD_simple.md` | 간소화판 (현재 조립본) |
+| `probe_a20_a21.png` | 멀티미터로 PhotoMOS 확인하는 법 |
+| `pad_placement.png` | 패드 붙이는 위치 (CH1 손목 신전근, CH2 삼두근) |
+| `output_wiring_simple.png` | 출력부 실물 연결: 리드선 → a21 → 게이팅·강도 사다리 → a26 → 참가자 STOP → 패드 (v2.2) |
+| `perfboard_7x9.png` / `PERFBOARD.md` | 만능기판(7×9cm) 출력부 배치 구상안과 구멍 목록 |
+| `breadboard_830_perf.png` / `BREADBOARD_perf.md` | 출력부를 만능기판으로 옮긴 뒤의 브레드보드 (구상안) |
+
+코덱스(ChatGPT 앱)로 해부학 그림도 생성했다. 2채널 그림에서 패드 위치는 대체로 맞았지만 패드 크기가 작게 그려졌고, 뒤에서 본 그림에 "elbow crease"가 잘못 표시됐다. 위치 참고용으로만 쓴다.
+
+**패드 위치 요약 (CH1)**: 팔꿈치 바깥 뼈(외측상과)에서 검지·중지 손등 뿌리 쪽으로 잇는 선 위. 패드 A 중심은 뼈에서 5cm, 패드 B 중심은 그보다 8cm 더 손목 쪽. 주먹을 쥐고 손등을 젖히면 볼록해지는 곳. 손가락만 펴지면 엄지 쪽으로 1cm.
+
+---
+
+## 6. 소프트웨어
+
+### 6.1 펌웨어 v2 (`firmware/ems_recoil/ems_recoil.ino`)
 - 상태머신, `delay()` 없는 논블로킹 구조, 센서 100Hz.
 - 반동 `$T,채널,ms,듀티,봉투`, 무게 `$W,마스크`(100ms마다 재전송해야 유지).
 - **v2.1 안전 예산 수정 (10/28)**: 12장 참고. 분당 반동 제한, 무게 누적 계산, 정지 경로의 누적 누락, 재들기 간격 0.5초, I2C 타임아웃.
 - **버그 수정 (10/7)**: 루프 맨 앞에서 현재 시각을 읽고 그 뒤에 명령을 처리해서, 명령이 기록한 시각이 더 커지면 부호 없는 뺄셈이 뒤집혔다. 증상은 반동이 바로 끝남, 무게 유지가 바로 풀림, 하트비트 끊김 오판. 명령 처리 뒤에 시각을 읽도록 수정. ESP32 펌웨어도 같이 수정.
 - **ESP32 (10/28)**: v1 구조에 머물러 v2 회로(유지 신호 필요)에서 자극이 나가지 않던 것을 우노 v2.1과 같은 로직으로 이식. 유지 신호는 GPIO32(CH1)·GPIO33(CH2).
 
-### 5.2 프로토콜
+### 6.2 프로토콜
 `$본문*체크섬` (XOR), 115200bps.
 
 ```
@@ -137,7 +156,7 @@ $T,1,120,100,0*57   총 반동 (CH1 120ms)
 $W,1*4A          무게 (CH1)       $W,3*48  CH1+CH2       $W,0*4B  해제
 ```
 
-### 5.3 Processing 시연 화면 (`processing/EMSRecoilSim/EMSRecoilSim.pde`)
+### 6.3 Processing 시연 화면 (`processing/EMSRecoilSim/EMSRecoilSim.pde`)
 
 | 모드 | 내용 |
 |---|---|
@@ -150,7 +169,7 @@ $W,1*4A          무게 (CH1)       $W,3*48  CH1+CH2       $W,0*4B  해제
 
 Processing 4.5 설치 완료, 스케치 컴파일 통과. 실제 화면 실행은 아직.
 
-### 5.4 도구 (`tools/`)
+### 6.4 도구 (`tools/`)
 
 | 파일 | 용도 |
 |---|---|
@@ -161,22 +180,6 @@ Processing 4.5 설치 완료, 스케치 컴파일 통과. 실제 화면 실행�
 | `duty_test.py` | 듀티 100/70/50/30%·감쇠 반동을 차례로 (LED 부하) |
 | `ladder_test.py` | 강도 단계 3 → 0을 2초씩 (LED 부하) |
 | `make_wiring.py`, `make_breadboard.py`, `make_probe_guide.py`, `make_pad_guide.py` | 그림 생성 스크립트 |
-
----
-
-## 6. 만든 그림 (`docs/`)
-
-| 파일 | 내용 |
-|---|---|
-| `wiring_ch1_uno.png` | CH1 회로 배선도 v2 |
-| `breadboard_830.png` / `BREADBOARD.md` | 830홀 브레드보드 실물 배치도와 구멍별 목록 (전체판) |
-| `breadboard_830_simple.png` / `BREADBOARD_simple.md` | 간소화판 (현재 조립본) |
-| `probe_a20_a21.png` | 멀티미터로 PhotoMOS 확인하는 법 |
-| `pad_placement.png` | 패드 붙이는 위치 (CH1 손목 신전근, CH2 삼두근) |
-
-코덱스(ChatGPT 앱)로 해부학 그림도 생성했다. 2채널 그림에서 패드 위치는 대체로 맞았지만 패드 크기가 작게 그려졌고, 뒤에서 본 그림에 "elbow crease"가 잘못 표시됐다. 위치 참고용으로만 쓴다.
-
-**패드 위치 요약 (CH1)**: 팔꿈치 바깥 뼈(외측상과)에서 검지·중지 손등 뿌리 쪽으로 잇는 선 위. 패드 A 중심은 뼈에서 5cm, 패드 B 중심은 그보다 8cm 더 손목 쪽. 주먹을 쥐고 손등을 젖히면 볼록해지는 곳. 손가락만 펴지면 엄지 쪽으로 1cm.
 
 ---
 
